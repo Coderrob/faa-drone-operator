@@ -1,0 +1,30 @@
+{
+  "name": "faa-part-107-study-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Original ACS-mapped FAA Part 107 study and compliance CLI",
+  "type": "module",
+  "bin": {
+    "part107": "dist/src/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:content": "node dist/src/cli.js validate",
+    "check": "npm run build && npm test && npm run validate:content"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

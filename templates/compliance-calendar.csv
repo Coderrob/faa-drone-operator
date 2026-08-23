@@ -1,0 +1,10 @@
+Item,Applies to,Issued/completed date,Expiration/due date,Advance reminder,Identifier/document location,Responsible person,Status,Verified against source date,Notes
+Remote Pilot knowledge recency,Remote PIC,,,90 days,,,Not started,,
+Remote Pilot certificate,Remote PIC,,,,,,Not started,,Certificate does not itself expire; track card/replacement separately
+Aircraft registration,Each Part 107 aircraft,,,90 days,,,Not started,,Currently valid 3 years
+Remote ID inventory verification,Each registered/RID device,,,30 days,,,Not started,,Recheck after equipment or firmware change
+Airspace authorization,Mission/location,,,,,,Not started,,Use authorization-specific dates/conditions
+Part 107 waiver,Operation if needed,,,120 days,,,Not started,,Track provisions and expiration
+Insurance,Organization/aircraft,,,30 days,,,Not started,,Not an FAA certificate requirement but may be required elsewhere
+Firmware/configuration review,Each aircraft,,,30 days,,,Not started,,Do not update immediately before critical mission without test
+Battery health review,Each battery,,,14 days,,,Not started,,Use manufacturer thresholds

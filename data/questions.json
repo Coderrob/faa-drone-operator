@@ -1,0 +1,164 @@
+[
+  {
+    "id": "REG-001",
+    "acsCode": "UA.I.A.K1",
+    "area": "I",
+    "task": "General",
+    "topic": "Part 107 applicability and weight",
+    "difficulty": 1,
+    "critical": true,
+    "prompt": "A small unmanned aircraft weighs 54.8 pounds at takeoff before a 0.4-pound sensor is attached. Does the resulting operation remain within the Part 107 small-UAS weight definition?",
+    "choices": [
+      "No; total takeoff weight is 55.2 pounds, which is not less than 55 pounds",
+      "Yes; payload is excluded when determining small-UAS weight",
+      "Yes; Part 107 permits aircraft weighing up to and including 55.5 pounds",
+      "No; Part 107 is limited to aircraft weighing less than 50 pounds"
+    ],
+    "correctIndex": 0,
+    "explanation": "Small means less than 55 pounds at takeoff, including everything onboard or attached. The sensor makes the total 55.2 pounds.",
+    "remediation": "Review ACS Area I Task A and 14 CFR 107.3, then calculate three configurations including all attachments.",
+    "citations": [
+      {
+        "label": "14 CFR Part 107",
+        "url": "https://www.ecfr.gov/current/title-14/section-107.3",
+        "locator": "§107.3, definition of small unmanned aircraft"
+      },
+      {
+        "label": "FAA-S-ACS-10B",
+        "url": "https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/uas_acs.pdf",
+        "locator": "UA.I.A.K1"
+      }
+    ],
+    "original": true
+  },
+  {
+    "id": "REG-002",
+    "acsCode": "UA.I.B.K21b",
+    "area": "I",
+    "task": "Operating Rules",
+    "topic": "Altitude limits",
+    "difficulty": 2,
+    "critical": true,
+    "prompt": "A 180-foot tower stands on terrain at the launch site. When the aircraft remains within 400 feet of the tower, what is the highest altitude the structure provision could permit before considering airspace or other restrictions?",
+    "choices": ["580 feet AGL", "400 feet AGL", "180 feet AGL", "780 feet AGL"],
+    "correctIndex": 0,
+    "explanation": "Within 400 feet of a structure, the aircraft may be no more than 400 feet above the structure's immediate uppermost limit: 180 + 400 = 580 feet AGL here.",
+    "remediation": "Review §107.51(b), distinguish AGL from MSL, and remember that controlled airspace authorization may still constrain altitude.",
+    "citations": [
+      {
+        "label": "14 CFR Part 107",
+        "url": "https://www.ecfr.gov/current/title-14/section-107.51",
+        "locator": "§107.51(b)"
+      }
+    ],
+    "original": true
+  },
+  {
+    "id": "AIR-001",
+    "acsCode": "UA.II.B.K2",
+    "area": "II",
+    "task": "Airspace Operational Requirements",
+    "topic": "LAANC authorization",
+    "difficulty": 1,
+    "critical": true,
+    "prompt": "A UAS Facility Map displays 200 feet for a planned location in Class D airspace. What does the number itself provide?",
+    "choices": [
+      "A planning value used in authorization processing, not permission to fly",
+      "Automatic permission for any Part 107 pilot to fly to 200 feet",
+      "A mandatory minimum altitude for unmanned aircraft",
+      "A waiver of visual-line-of-sight requirements below 200 feet"
+    ],
+    "correctIndex": 0,
+    "explanation": "A facility-map value supports authorization processing. The remote PIC must obtain and comply with an actual FAA or LAANC authorization.",
+    "remediation": "Review the FAA Part 107 airspace authorization page and write the difference between a map value and an issued authorization.",
+    "citations": [
+      {
+        "label": "FAA Part 107 Airspace Authorizations",
+        "url": "https://www.faa.gov/uas/commercial_operators/part_107_airspace_authorizations",
+        "locator": "LAANC and UAS Facility Maps"
+      }
+    ],
+    "original": true
+  },
+  {
+    "id": "WX-001",
+    "acsCode": "UA.III.A.K2",
+    "area": "III",
+    "task": "Sources of Weather",
+    "topic": "METAR decoding",
+    "difficulty": 2,
+    "critical": false,
+    "prompt": "In a METAR, what does 22015G25KT report?",
+    "choices": [
+      "Wind from 220 degrees true at 15 knots, gusting 25 knots",
+      "Wind toward 220 degrees magnetic at 25 knots, gusting 15 knots",
+      "Visibility 22 miles with gusts from 150 degrees",
+      "Wind from 220 degrees true at 15 mph, gusting 25 mph"
+    ],
+    "correctIndex": 0,
+    "explanation": "METAR wind groups report the direction the wind is from in degrees true, followed by speed and gust in knots.",
+    "remediation": "Decode five complete METAR wind groups, including calm, variable, and gusting examples.",
+    "citations": [
+      {
+        "label": "FAA-S-ACS-10B",
+        "url": "https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/uas_acs.pdf",
+        "locator": "UA.III.A.K2"
+      }
+    ],
+    "original": true
+  },
+  {
+    "id": "PERF-001",
+    "acsCode": "UA.IV.A.K1a",
+    "area": "IV",
+    "task": "Loading and Performance",
+    "topic": "Payload effects",
+    "difficulty": 1,
+    "critical": false,
+    "prompt": "Which outcome is most likely when payload weight is added while all other conditions remain unchanged?",
+    "choices": [
+      "More power demand and reduced endurance margin",
+      "Lower current draw and longer endurance",
+      "No change unless the aircraft exceeds 55 pounds",
+      "Automatically improved stability and climb performance"
+    ],
+    "correctIndex": 0,
+    "explanation": "Added mass normally demands more thrust and electrical power, reducing climb, acceleration, endurance, and contingency margin.",
+    "remediation": "Review UA.IV.A and compare manufacturer performance for two payload configurations.",
+    "citations": [
+      {
+        "label": "FAA-S-ACS-10B",
+        "url": "https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/uas_acs.pdf",
+        "locator": "UA.IV.A.K1a"
+      }
+    ],
+    "original": true
+  },
+  {
+    "id": "OPS-001",
+    "acsCode": "UA.V.C.K3",
+    "area": "V",
+    "task": "Emergency Procedures",
+    "topic": "Lost control link",
+    "difficulty": 2,
+    "critical": true,
+    "prompt": "Why should return-to-home altitude and behavior be reviewed for every new site?",
+    "choices": [
+      "The automatic path can conflict with structures, airspace, people, wind, or remaining energy",
+      "Return-to-home always disables Remote ID until landing",
+      "Part 107 requires the return altitude to equal exactly 400 feet AGL",
+      "The setting controls whether the registration certificate remains valid"
+    ],
+    "correctIndex": 0,
+    "explanation": "A generic automatic climb and direct route can create a new hazard. Lost-link behavior must fit the actual site, airspace, obstacles, people, wind, and battery reserve.",
+    "remediation": "Review UA.V.C.K3 and document lost-link settings for a sample urban and rural site.",
+    "citations": [
+      {
+        "label": "FAA-S-ACS-10B",
+        "url": "https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/uas_acs.pdf",
+        "locator": "UA.V.C.K3"
+      }
+    ],
+    "original": true
+  }
+]
