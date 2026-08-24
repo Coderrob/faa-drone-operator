@@ -12,7 +12,9 @@ function probeServer(): Promise<boolean> {
       response.resume();
       resolve(response.statusCode === 200);
     });
-    request.on("error", () => { resolve(false); });
+    request.on("error", () => {
+      resolve(false);
+    });
     request.setTimeout(500, () => {
       request.destroy();
       resolve(false);
@@ -59,7 +61,11 @@ async function probeRepeatedly(attempts: number): Promise<boolean> {
  * @returns The process exit code, defaulting to one.
  */
 function waitForExit(child: ChildProcess): Promise<number> {
-  return new Promise((resolve) => child.on("exit", (code) => { resolve(code ?? 1); }));
+  return new Promise((resolve) =>
+    child.on("exit", (code) => {
+      resolve(code ?? 1);
+    }),
+  );
 }
 
 /**
@@ -86,7 +92,8 @@ async function main(): Promise<void> {
   try {
     await waitForServer();
     const playwright = spawn(process.execPath, [path.resolve("node_modules/playwright/cli.js"), "test"], {
-      cwd: process.cwd(), stdio: "inherit",
+      cwd: process.cwd(),
+      stdio: "inherit",
     });
     exitCode = await waitForExit(playwright);
   } finally {

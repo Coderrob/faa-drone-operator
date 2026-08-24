@@ -6,7 +6,17 @@ import cardQuestions from "../../data/card-questions.json";
 import forms from "../../data/mock-exams.json";
 import type { Question } from "../../src/types";
 ---
+
 <BaseLayout title="Mock exams" description="Take either original 60-question FAA Part 107 mock examination in a timed browser experience.">
-  <PageHero compact eyebrow="Exam readiness" title="Two hours. Sixty questions. One honest baseline." description="Forms A and B follow the ACS Area distribution. Explanations stay hidden until submission, and unfinished work is saved on this device." />
-  <section class="container-shell py-12"><div class="mb-7 rounded-xl border-l-4 border-amber-500 bg-amber-50 p-5 text-sm leading-6 text-amber-950"><strong>Practice material:</strong> These are original questions, not reproduced FAA test items. A 70% score matches the knowledge-test passing threshold, but use missed ACS codes for remediation rather than memorizing a form.</div><QuizApp mode="exam" questions={cardQuestions as Question[]} forms={forms} /></section>
+  <PageHero
+    compact
+    eyebrow="Exam readiness"
+    title="Two hours. Sixty questions. One honest baseline."
+    description="Forms A and B follow the ACS Area distribution. Explanations stay hidden until submission, and unfinished work is saved on this device."
+  />
+  <section class="container-shell py-12">
+    <div class="mb-7 rounded-xl border-l-4 border-amber-500 bg-amber-50 p-5 text-sm leading-6 text-amber-950">
+      <strong>Practice material:</strong> These are original questions, not reproduced FAA test items. A 70% score matches the knowledge-test passing threshold, but use missed ACS codes for remediation rather than memorizing a form.
+    </div><QuizApp mode="exam" questions={cardQuestions as Question[]} forms={forms} />
+  </section>
 </BaseLayout>

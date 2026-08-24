@@ -1,9 +1,12 @@
 ---
 import Icon from "./Icon.astro";
 import { sitePath } from "../lib/paths";
-interface Props { current: string; }
+interface Props {
+  current: string;
+}
 const { current } = Astro.props;
 ---
+
 <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
   <a href={sitePath("/")} class="font-semibold hover:text-sky-700">Home</a><Icon name="chevron" class="size-3" />
   <a href={sitePath("/learn/")} class="font-semibold hover:text-sky-700">Learn</a><Icon name="chevron" class="size-3" />

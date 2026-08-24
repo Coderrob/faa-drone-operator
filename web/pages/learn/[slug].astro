@@ -10,17 +10,26 @@ import { repositoryUrl } from "../../lib/paths";
 export function getStaticPaths() {
   return getDocuments().map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
 }
-interface Props { entry: DocumentEntry; }
+interface Props {
+  entry: DocumentEntry;
+}
 const { entry } = Astro.props;
 const html = renderDocument(entry);
 ---
+
 <BaseLayout title={entry.title} description={entry.summary}>
   <div class="container-shell py-8"><Breadcrumbs current={entry.title} /></div>
   <article class="container-shell grid gap-10 pb-16 lg:grid-cols-[minmax(0,1fr)_15rem]">
     <div class="panel min-w-0 p-6 sm:p-10 lg:p-12">
-      <p class="eyebrow">{entry.eyebrow}</p><h1 class="mt-3 font-display text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">{entry.title}</h1><p class="mt-5 border-b border-slate-200 pb-8 text-lg leading-8 text-slate-600">{entry.summary}</p>
+      <p class="eyebrow">{entry.eyebrow}</p><h1 class="mt-3 font-display text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
+        {entry.title}
+      </h1><p class="mt-5 border-b border-slate-200 pb-8 text-lg leading-8 text-slate-600">{entry.summary}</p>
       <div class="prose-faa mt-9" set:html={html} />
     </div>
-    <aside class="no-print lg:sticky lg:top-24 lg:self-start"><p class="eyebrow">Document</p><p class="mt-3 text-sm leading-6 text-slate-600">Source file: <code class="text-xs">{entry.file}</code></p><a href={`${repositoryUrl}/blob/main/${entry.file}`} class="button-secondary mt-5 w-full">View source</a><button type="button" class="button-secondary mt-2 w-full" onclick="window.print()">Print guide</button></aside>
+    <aside class="no-print lg:sticky lg:top-24 lg:self-start">
+      <p class="eyebrow">Document</p><p class="mt-3 text-sm leading-6 text-slate-600">
+        Source file: <code class="text-xs">{entry.file}</code>
+      </p><a href={`${repositoryUrl}/blob/main/${entry.file}`} class="button-secondary mt-5 w-full">View source</a><button type="button" class="button-secondary mt-2 w-full" onclick="window.print()">Print guide</button>
+    </aside>
   </article>
 </BaseLayout>

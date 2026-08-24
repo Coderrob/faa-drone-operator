@@ -58,9 +58,7 @@ function printValidationErrors(errors: readonly string[]): number {
  * @returns Release-approval errors.
  */
 function releaseErrors(questions: readonly Question[]): string[] {
-  return questions
-    .filter((question) => question.id.startsWith("CARD-") && question.distractorReview !== "approved")
-    .map((question) => `${question.id}: distractors are not approved for release`);
+  return questions.filter((question) => question.id.startsWith("CARD-") && question.distractorReview !== "approved").map((question) => `${question.id}: distractors are not approved for release`);
 }
 
 /**

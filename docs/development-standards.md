@@ -30,6 +30,11 @@ configuration, and tooling code.
 - Imports are grouped and alphabetized deterministically. Duplicate imports,
   imports after executable statements, and missing post-import spacing fail lint.
 - Type-only imports must use TypeScript's explicit type-import syntax.
+- Prettier formats TypeScript, Astro, JavaScript, JSON, YAML, and CSS sources;
+  `npm run quality` rejects formatting drift before linting or tests run.
+- `.editorconfig` defines UTF-8, indentation, final-newline, and whitespace
+  behavior. `.gitattributes` normalizes text to LF while preserving binary files
+  and Windows command-script line endings.
 
 ## FAST unit tests
 
@@ -50,6 +55,7 @@ Install Node.js 20 or newer, then run:
 ```powershell
 npm ci
 npm run quality
+npm run format:check
 npm run lint:markdown
 npm run typecheck:all
 npm run test:coverage

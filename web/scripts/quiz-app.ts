@@ -2,7 +2,8 @@ import { presentQuestion, selectQuestions } from "../../src/quiz";
 import { answerLocked, cancelFinish, currentIndex, formValue, historyEntry, matchesFilters, newSession, timerExpiry, validIndex } from "../lib/quiz-controller";
 import { areaScores, reviewHtml, scoreSummary } from "../lib/quiz-results";
 import { correctAnswerCount, formatRemaining, parseHistory, parseSession, scorePercent, toggleQuestionFlag } from "../lib/quiz-session";
-import { choiceButton, feedbackView, historyCards, navigatorButton } from "../lib/quiz-view";
+import { feedbackView, historyCards, navigatorButton } from "../lib/quiz-view";
+import { renderQuestionContent } from "./quiz-question-view";
 import type { PresentedQuestion } from "../../src/types";
 import type { HistoryEntry, QuizPayload as Payload, SessionState } from "../lib/quiz-session";
 
@@ -40,7 +41,9 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
   }
 
   /** Persists the current session. */
-  function save(): void { if (state) localStorage.setItem(activeKey, JSON.stringify(state)); }
+  function save(): void {
+    if (state) localStorage.setItem(activeKey, JSON.stringify(state));
+  }
 
   /** Refreshes recent-result cards. */
   function renderHistory(): void {
@@ -82,7 +85,10 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
   function startExam(values: FormData, seed: string): void {
     const formId = formValue(values, "form", "A");
     const examForm = payload.forms.find(({ id }) => id === formId);
-    if (!examForm) { error.textContent = "The selected exam form is unavailable."; return; }
+    if (!examForm) {
+      error.textContent = "The selected exam form is unavailable.";
+      return;
+    }
     const selected = examForm.questionIds.map((id) => questionsById.get(id)!).filter(Boolean);
     const expiresAt = Date.now() + examForm.timeLimitMinutes * 60_000;
     begin(newSession(mode, seed, selected, { form: formId, expiresAt }));
@@ -98,7 +104,10 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     const topic = formValue(values, "topic", "").trim().toLowerCase();
     const count = Number(formValue(values, "count", "10"));
     const candidates = payload.questions.filter((question) => matchesFilters(question, area, topic));
-    if (candidates.length < count) { error.textContent = `Only ${candidates.length} questions match. Reduce the count or broaden the filter.`; return; }
+    if (candidates.length < count) {
+      error.textContent = `Only ${candidates.length} questions match. Reduce the count or broaden the filter.`;
+      return;
+    }
     begin(newSession(mode, seed, selectQuestions(candidates, count, seed)));
   }
 
@@ -111,7 +120,10 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     error.textContent = "";
     const values = new FormData(form);
     const seed = formValue(values, "seed", "").trim();
-    if (!seed) { error.textContent = "Enter a session seed."; return; }
+    if (!seed) {
+      error.textContent = "Enter a session seed.";
+      return;
+    }
     const starters = { exam: startExam, study: startStudy };
     starters[mode](values, seed);
   }
@@ -126,16 +138,8 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     const selected = state.answers[question.id];
     const answered = selected !== undefined;
     const isStudyRevealed = [mode === "study", answered].every(Boolean);
-    const percent = Math.round(((state.current + 1) / presented.length) * 100);
-    element<HTMLElement>("[data-progress-label]").textContent = `Question ${state.current + 1} of ${presented.length}`;
-    element<HTMLElement>("[data-progress-percent]").textContent = `${percent}%`;
-    element<HTMLElement>("[data-progress-bar]").style.width = `${percent}%`;
     element<HTMLElement>("[data-acs-code]").textContent = `${question.acsCode} · ${areaNames[question.area]}`;
-    const prompt = element<HTMLElement>("[data-prompt]");
-    prompt.textContent = question.prompt; prompt.tabIndex = -1;
-    const choices = element<HTMLElement>("[data-choices]");
-    choices.innerHTML = item.choices.map((choice, index) => choiceButton(choice, index, selected, item.correctIndex, isStudyRevealed)).join("");
-    choices.querySelectorAll<HTMLButtonElement>("[data-choice]").forEach((button) => { button.addEventListener("click", () => { answer(Number(button.dataset.choice)); }); });
+    renderQuestionContent({ root, item, selected, revealed: isStudyRevealed, current: state.current, total: presented.length, areaName: areaNames[question.area]!, onAnswer: answer });
     const flag = element<HTMLButtonElement>("[data-flag]");
     const flagged = state.flagged.includes(question.id);
     flag.setAttribute("aria-pressed", String(flagged));
@@ -180,14 +184,26 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     const answered = new Set(Object.keys(state.answers));
     const flagged = new Set(state.flagged);
     element<HTMLElement>("[data-navigator]").innerHTML = presented.map(({ question }, index) => navigatorButton(question, index, state!.current, answered, flagged)).join("");
-    element<HTMLElement>("[data-navigator]").querySelectorAll<HTMLButtonElement>("[data-jump]").forEach((button) => { button.addEventListener("click", () => { navigate(Number(button.dataset.jump)); }); });
+    element<HTMLElement>("[data-navigator]")
+      .querySelectorAll<HTMLButtonElement>("[data-jump]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          navigate(Number(button.dataset.jump));
+        });
+      });
   }
 
   /**
    * Moves to a question.
    * @param index - Target question index.
    */
-  function navigate(index: number): void { if (!state) return; if (!validIndex(index, presented.length)) return; state.current = index; renderQuestion(); element<HTMLElement>("[data-prompt]").focus(); }
+  function navigate(index: number): void {
+    if (!state) return;
+    if (!validIndex(index, presented.length)) return;
+    state.current = index;
+    renderQuestion();
+    element<HTMLElement>("[data-prompt]").focus();
+  }
 
   /** Toggles the active question flag. */
   function toggleFlag(): void {
@@ -249,20 +265,42 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
   }
 
   /** Opens the previous question. */
-  function previousQuestion(): void { navigate(currentIndex(state) - 1); }
+  function previousQuestion(): void {
+    navigate(currentIndex(state) - 1);
+  }
   /** Opens the next question or finishes the session. */
   function nextQuestion(): void {
-    if (currentIndex(state) === presented.length - 1) { finish(false); return; }
+    if (currentIndex(state) === presented.length - 1) {
+      finish(false);
+      return;
+    }
     navigate(currentIndex(state) + 1);
   }
   /** Saves and exits the active session. */
-  function exitSession(): void { save(); window.clearInterval(timer); sessionPanel.classList.add("hidden"); setupPanel.classList.remove("hidden"); resumeButton.classList.remove("hidden"); }
+  function exitSession(): void {
+    save();
+    window.clearInterval(timer);
+    sessionPanel.classList.add("hidden");
+    setupPanel.classList.remove("hidden");
+    resumeButton.classList.remove("hidden");
+  }
   /** Returns from results to setup. */
-  function newSessionSetup(): void { resultsPanel.classList.add("hidden"); setupPanel.classList.remove("hidden"); state = undefined; }
+  function newSessionSetup(): void {
+    resultsPanel.classList.add("hidden");
+    setupPanel.classList.remove("hidden");
+    state = undefined;
+  }
   /** Clears saved history after confirmation. */
-  function clearHistory(): void { if (!confirm("Clear locally saved quiz history?")) return; localStorage.removeItem(historyKey); renderHistory(); }
+  function clearHistory(): void {
+    if (!confirm("Clear locally saved quiz history?")) return;
+    localStorage.removeItem(historyKey);
+    renderHistory();
+  }
   /** Resumes a compatible saved session. */
-  function resumeSession(): void { const active = readActive(); if (active) begin(active); }
+  function resumeSession(): void {
+    const active = readActive();
+    if (active) begin(active);
+  }
   /**
    * Handles an enabled quiz keyboard shortcut.
    * @param event - Keyboard event.
@@ -270,7 +308,16 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
   function handleShortcut(event: KeyboardEvent): void {
     const blocked = [sessionPanel.classList.contains("hidden"), event.altKey, event.ctrlKey, event.metaKey].includes(true);
     if (blocked) return;
-    const actions: Record<string, () => void> = { "1": answer.bind(undefined, 0), "2": answer.bind(undefined, 1), "3": answer.bind(undefined, 2), "4": answer.bind(undefined, 3), ArrowLeft: previousQuestion, ArrowRight: nextQuestion, f: toggleFlag, F: toggleFlag };
+    const actions: Record<string, () => void> = {
+      "1": answer.bind(undefined, 0),
+      "2": answer.bind(undefined, 1),
+      "3": answer.bind(undefined, 2),
+      "4": answer.bind(undefined, 3),
+      ArrowLeft: previousQuestion,
+      ArrowRight: nextQuestion,
+      f: toggleFlag,
+      F: toggleFlag,
+    };
     actions[event.key]?.();
   }
 

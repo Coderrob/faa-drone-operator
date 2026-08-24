@@ -3,9 +3,16 @@ import { Command, Option } from "commander";
 import { runComplianceAudit, runStats, runStudy, runValidate } from "./commands.js";
 import type { StudyOptions } from "./study-command.js";
 
-interface StudyCliOptions extends StudyOptions { readonly save?: boolean }
-interface StatsCliOptions { readonly history: string; readonly today?: string }
-interface ValidateCliOptions { readonly release?: boolean }
+interface StudyCliOptions extends StudyOptions {
+  readonly save?: boolean;
+}
+interface StatsCliOptions {
+  readonly history: string;
+  readonly today?: string;
+}
+interface ValidateCliOptions {
+  readonly release?: boolean;
+}
 interface ComplianceCliOptions {
   readonly calendar: string;
   readonly today?: string;
@@ -13,10 +20,7 @@ interface ComplianceCliOptions {
 }
 
 const program = new Command();
-program
-  .name("part107")
-  .description("Original ACS-mapped FAA Part 107 study CLI")
-  .version("0.1.0");
+program.name("part107").description("Original ACS-mapped FAA Part 107 study CLI").version("0.1.0");
 
 /**
  * Adds shared study and exam flags to a Commander command.
@@ -38,10 +42,9 @@ function addStudyOptions(command: Command, defaultCount: number): Command {
     .option("--no-save", "do not append this session to history");
 }
 
-addStudyOptions(program.command("study").description("run a study session"), 10)
-  .action(async (options: StudyCliOptions) => {
-    process.exitCode = await runStudy({ ...options, noSave: options.save === false, mode: "study" });
-  });
+addStudyOptions(program.command("study").description("run a study session"), 10).action(async (options: StudyCliOptions) => {
+  process.exitCode = await runStudy({ ...options, noSave: options.save === false, mode: "study" });
+});
 
 addStudyOptions(program.command("exam").description("run exam mode; explanations appear after scoring"), 60)
   .option("--form <A|B>", "use fixed original 60-question mock form A or B")
@@ -49,7 +52,8 @@ addStudyOptions(program.command("exam").description("run exam mode; explanations
     process.exitCode = await runStudy({ ...options, noSave: options.save === false, mode: "exam" });
   });
 
-program.command("stats")
+program
+  .command("stats")
   .description("summarize saved attempts and remediation count")
   .option("--history <path>", "history JSON path", ".part107/history.json")
   .option("--today <YYYY-MM-DD>", "deterministic date for due count")
@@ -59,14 +63,16 @@ program.command("stats")
     process.exitCode = await runStats(history, date);
   });
 
-program.command("validate")
+program
+  .command("validate")
   .description("validate the canonical question dataset")
   .option("--release", "also require generated distractors to be human-approved")
   .action(({ release }: ValidateCliOptions) => {
     process.exitCode = runValidate(release === true);
   });
 
-program.command("compliance")
+program
+  .command("compliance")
   .description("audit compliance calendar due dates and required ownership")
   .option("--calendar <path>", "compliance calendar CSV", "templates/compliance-calendar.csv")
   .option("--today <YYYY-MM-DD>", "deterministic audit date")

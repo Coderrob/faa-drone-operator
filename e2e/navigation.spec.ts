@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 test("home and learning library navigate from the custom-domain root", async ({ page }) => {
   await page.goto("./");
   await expect(page).toHaveTitle("Part 107 Flight Desk");
+  await expect(page.getByText("Not an official FAA or U.S. government website.")).toBeVisible();
+  await expect(page.locator('body[data-design-system="uswds"]')).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Learn the rules");
   await page.getByRole("link", { name: "Start the roadmap" }).click();
   await expect(page).toHaveURL(/\/learn\/certification-roadmap\/$/);
@@ -18,4 +20,11 @@ test("mobile navigation opens and reaches the mock exam", async ({ page, isMobil
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
   await page.locator("#mobile-nav").getByRole("link", { name: "Mock exam" }).click();
   await expect(page).toHaveURL(/\/exam\/$/);
+});
+
+test("should hide the mobile menu control in desktop navigation", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop-only navigation assertion");
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Open navigation" })).toBeHidden();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
 });

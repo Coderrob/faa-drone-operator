@@ -8,7 +8,10 @@ export interface MockForm {
   questionIds: string[];
 }
 
-export interface QuizPayload { questions: Question[]; forms: MockForm[]; }
+export interface QuizPayload {
+  questions: Question[];
+  forms: MockForm[];
+}
 export interface SessionState {
   version: 1;
   mode: "study" | "exam";
@@ -21,7 +24,14 @@ export interface SessionState {
   startedAt: string;
   expiresAt?: number;
 }
-export interface HistoryEntry { mode: string; form?: string; completedAt: string; correct: number; total: number; percent: number; }
+export interface HistoryEntry {
+  mode: string;
+  form?: string;
+  completedAt: string;
+  correct: number;
+  total: number;
+  percent: number;
+}
 
 /**
  * Parses a saved session and rejects stale or incompatible data.

@@ -3,7 +3,10 @@ import { dirname } from "node:path";
 import type { HistoryFile, SessionRecord } from "./types.js";
 
 const EMPTY_HISTORY: HistoryFile = { version: 1, sessions: [] };
-interface ReviewState { streak: number; reviewedAt: number }
+interface ReviewState {
+  streak: number;
+  reviewedAt: number;
+}
 const CORRECT_INTERVALS = [3, 7, 14, 30] as const;
 
 /**
