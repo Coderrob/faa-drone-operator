@@ -4,7 +4,7 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $path = Join-Path $projectRoot 'data/acs-elements.csv'
 $rows = @(Import-Csv -LiteralPath $path)
 
-function Exercise-For([string]$code) {
+function Get-Exercise([string]$code) {
     switch -Regex ($code) {
         '^UA\.II\.A\.' { return 'EX-CHART-01|EX-CHART-02' }
         '^UA\.II\.B\.' { return 'EX-AIRSPACE-03|EX-NIGHT-01' }
@@ -27,7 +27,7 @@ function Exercise-For([string]$code) {
 }
 
 foreach ($row in $rows) {
-    $row.exercise = Exercise-For $row.code
+    $row.exercise = Get-Exercise $row.code
     if (-not [string]::IsNullOrWhiteSpace($row.lesson) -and
         -not [string]::IsNullOrWhiteSpace($row.card_or_question)) {
         $row.status = 'mapped'

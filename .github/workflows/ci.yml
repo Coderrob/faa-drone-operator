@@ -82,7 +82,14 @@ jobs:
         shell: pwsh
         run: |
           Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
-          Invoke-ScriptAnalyzer -Path . -Recurse -Severity Warning -EnableExit
+          $scripts = @(git ls-files -- '*.ps1')
+          $findings = @($scripts | ForEach-Object {
+            Invoke-ScriptAnalyzer -Path $_ -Severity Warning
+          })
+          $findings | Format-Table RuleName, ScriptName, Line, Message -Wrap
+          if ($findings.Count -gt 0) {
+            throw "PSScriptAnalyzer found $($findings.Count) issue(s)."
+          }
 
   typescript:
     name: TypeScript full CI
