@@ -52,14 +52,10 @@ jobs:
           SITE_URL: https://${{ github.repository_owner }}.github.io
           BASE_PATH: /${{ github.event.repository.name }}
 
-      - name: Build and upload Astro site
-        uses: withastro/action@v6
+      - name: Upload verified Pages artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          node-version: 24
-          build-cmd: npm run build
-        env:
-          SITE_URL: https://${{ github.repository_owner }}.github.io
-          BASE_PATH: /${{ github.event.repository.name }}
+          path: ./site-dist
 
   deploy:
     if: github.event_name != 'pull_request'
