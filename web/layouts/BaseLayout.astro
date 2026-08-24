@@ -2,22 +2,30 @@
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
-interface Props { title: string; description: string; }
+interface Props {
+  title: string;
+  description: string;
+}
 const { title, description } = Astro.props;
 const fullTitle = title === "Part 107 Flight Desk" ? title : `${title} | Part 107 Flight Desk`;
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#07111f" />
+    <meta name="theme-color" content="#162e51" />
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
     <title>{fullTitle}</title>
   </head>
-  <body class="min-h-screen">
-    <a href="#main-content" class="fixed top-2 left-2 z-[100] -translate-y-20 rounded bg-white px-4 py-2 font-bold text-ink-950 focus:translate-y-0">Skip to content</a>
+  <body class="min-h-screen" data-design-system="uswds">
+    <a href="#main-content" class="usa-skipnav">Skip to main content</a>
+    <div class="uswds-accent-rule" aria-hidden="true"></div>
+    <div class="uswds-disclosure">
+      <div class="container-shell py-2"><strong>Independent training resource</strong> — Not an official FAA or U.S. government website.</div>
+    </div>
     <SiteHeader />
     <main id="main-content"><slot /></main>
     <SiteFooter />

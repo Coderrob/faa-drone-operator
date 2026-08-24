@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 test("home and learning library navigate from the custom-domain root", async ({ page }) => {
   await page.goto("./");
   await expect(page).toHaveTitle("Part 107 Flight Desk");
+  await expect(page.getByText("Not an official FAA or U.S. government website.")).toBeVisible();
+  await expect(page.locator('body[data-design-system="uswds"]')).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Learn the rules");
   await page.getByRole("link", { name: "Start the roadmap" }).click();
   await expect(page).toHaveURL(/\/learn\/certification-roadmap\/$/);

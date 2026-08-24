@@ -5,7 +5,10 @@ import DocumentCard from "../../components/DocumentCard.astro";
 import { getDocuments } from "../../lib/documents";
 const documents = getDocuments();
 ---
+
 <BaseLayout title="Learning library" description="Browse the complete FAA Part 107 certification, study, flight, and compliance library.">
   <PageHero compact eyebrow="Learning library" title="The whole flight desk, organized." description="Follow the sequence from certification through continuing compliance, or jump directly to the operating question in front of you." />
-  <section class="container-shell py-14"><div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{documents.map((entry) => <DocumentCard entry={entry} />)}</div></section>
+  <section class="container-shell py-14">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{documents.map((entry) => <DocumentCard entry={entry} />)}</div>
+  </section>
 </BaseLayout>

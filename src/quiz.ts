@@ -9,11 +9,7 @@ import type { PresentedQuestion, Question } from "./types.js";
  * @returns The selected questions.
  * @throws {Error} When count is invalid or exceeds the pool size.
  */
-export function selectQuestions(
-  questions: readonly Question[],
-  count: number,
-  seed: string,
-): Question[] {
+export function selectQuestions(questions: readonly Question[], count: number, seed: string): Question[] {
   validateCount(count);
   if (count > questions.length) {
     throw new Error(`requested ${count} questions, but only ${questions.length} match`);

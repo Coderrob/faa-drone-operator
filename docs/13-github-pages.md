@@ -82,3 +82,15 @@ all internal links and bundled assets are generated from the domain root.
 The web application consumes the same canonical JSON as the CLI. Do not edit
 generated question data by hand; rebuild it through the existing tools and run
 the complete validation suite.
+
+## USWDS theme
+
+The site installs the official `@uswds/uswds` package and imports its compiled
+styles before project-level Tailwind tokens. Shared components adapt USWDS
+typography, colors, focus indicators, buttons, forms, cards, navigation, prose,
+and identifier patterns to the Part 107 learning workflow.
+
+Because `faadroneoperator.com` is an independent `.com` educational site, it
+must not display the official U.S. government banner or imply FAA endorsement.
+The layout instead presents an explicit independent-resource disclosure above
+the header and repeats the ownership statement in the footer identifier.

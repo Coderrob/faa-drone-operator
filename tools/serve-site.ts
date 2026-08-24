@@ -6,8 +6,11 @@ const host = process.env.HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 4321);
 const output = path.resolve("site-dist");
 const mime: Readonly<Record<string, string>> = {
-  ".css": "text/css", ".html": "text/html", ".js": "text/javascript",
-  ".json": "application/json", ".svg": "image/svg+xml",
+  ".css": "text/css",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".json": "application/json",
+  ".svg": "image/svg+xml",
 };
 
 /**
@@ -110,7 +113,9 @@ function handleMessage(message: unknown): void {
 }
 
 const server = http.createServer(handleRequest);
-server.listen(port, host, () => { console.log(`Static test server: http://${host}:${port}/`); });
+server.listen(port, host, () => {
+  console.log(`Static test server: http://${host}:${port}/`);
+});
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 process.on("message", handleMessage);

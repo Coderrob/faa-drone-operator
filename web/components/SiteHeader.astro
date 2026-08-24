@@ -9,22 +9,41 @@ const links = [
   { href: sitePath("/resources/"), label: "Resources" },
 ];
 ---
-<header class="sticky top-0 z-50 border-b border-white/10 bg-ink-950 text-white shadow-lg shadow-slate-950/10">
-  <div class="container-shell flex h-18 items-center justify-between gap-4">
+
+<header class="usa-header sticky top-0 z-50 border-b-4 border-sky-500 bg-white text-ink-950 shadow-sm">
+  <div class="container-shell flex h-20 items-center justify-between gap-4">
     <a href={sitePath("/")} class="flex min-w-0 items-center gap-3 font-display font-bold tracking-tight">
-      <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-amber-500 text-ink-950"><Icon name="plane" /></span>
-      <span class="truncate"><span class="hidden sm:inline">Part 107 </span>Flight Desk</span>
+      <span class="grid size-11 shrink-0 place-items-center rounded bg-ink-950 text-white"><Icon name="plane" /></span>
+      <span class="truncate text-lg"><span class="hidden sm:inline">Part 107 </span>Flight Desk<small class="mt-0.5 hidden font-sans text-xs font-normal text-slate-600 sm:block">Certification and operations study system</small></span>
     </a>
     <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
-      {links.map((link) => <a href={link.href} class:list={["rounded-md px-3 py-2 text-sm font-semibold transition hover:bg-white/10", pathname.startsWith(link.href) && "bg-white/12 text-sky-300"]}>{link.label}</a>)}
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={["border-b-4 border-transparent px-3 py-6 text-base font-bold transition hover:border-sky-400 hover:text-sky-700", pathname.startsWith(link.href) && "border-sky-500 text-sky-700"]}
+            aria-current={pathname.startsWith(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
     </nav>
     <div class="flex items-center gap-2">
-      <a href={repositoryUrl} class="hidden rounded-md p-2 text-slate-300 hover:bg-white/10 hover:text-white sm:block" aria-label="View source on GitHub"><Icon name="github" /></a>
-      <button id="menu-toggle" class="rounded-md p-2 hover:bg-white/10 lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><Icon name="menu" /></button>
+      <a href={repositoryUrl} class="hidden rounded p-2 text-slate-600 hover:bg-blue-50 hover:text-sky-700 sm:block" aria-label="View source on GitHub"><Icon name="github" /></a>
+      <button id="menu-toggle" class="usa-button m-0 rounded bg-sky-500 p-2 text-white lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><Icon name="menu" /></button>
     </div>
   </div>
-  <nav id="mobile-nav" class="container-shell hidden border-t border-white/10 py-3 lg:hidden" aria-label="Mobile navigation">
-    <div class="grid gap-1">{links.map((link) => <a href={link.href} class="rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-white/10">{link.label}</a>)}</div>
+  <nav id="mobile-nav" class="container-shell hidden border-t border-slate-200 py-3 lg:hidden" aria-label="Mobile navigation">
+    <div class="grid gap-1">
+      {
+        links.map((link) => (
+          <a href={link.href} class="border-l-4 border-transparent px-3 py-2.5 text-base font-bold hover:border-sky-500 hover:bg-blue-50 hover:text-sky-700">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
   </nav>
 </header>
 <script>

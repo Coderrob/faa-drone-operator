@@ -8,12 +8,6 @@
     "noEmit": true,
     "rootDir": "."
   },
-  "include": [
-    "*.ts",
-    "e2e/**/*.ts",
-    "src/**/*.ts",
-    "tools/**/*.ts",
-    "web/**/*.ts"
-  ],
+  "include": ["*.ts", "e2e/**/*.ts", "src/**/*.ts", "tools/**/*.ts", "web/**/*.ts"],
   "exclude": ["coverage", "dist", "dist-cli", "node_modules", "site-dist"]
 }

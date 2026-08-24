@@ -1,5 +1,5 @@
 import type { HistoryEntry } from "./quiz-session";
-import type { Question, PresentedQuestion  } from "../../src/types";
+import type { Question, PresentedQuestion } from "../../src/types";
 
 const entities: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
 const choiceClasses = {
@@ -43,10 +43,14 @@ export function choiceButton(choice: string, index: number, selected: number | u
 function choiceState(index: number, selected: number | undefined, correctIndex: number, revealed: boolean): keyof typeof choiceClasses {
   const key = `${revealed}:${index === correctIndex}:${index === selected}`;
   const states: Record<string, keyof typeof choiceClasses> = {
-    "true:true:false": "correct", "true:true:true": "correct",
-    "true:false:true": "incorrect", "true:false:false": "idle",
-    "false:true:true": "selected", "false:false:true": "selected",
-    "false:true:false": "idle", "false:false:false": "idle",
+    "true:true:false": "correct",
+    "true:true:true": "correct",
+    "true:false:true": "incorrect",
+    "true:false:false": "idle",
+    "false:true:true": "selected",
+    "false:false:true": "selected",
+    "false:true:false": "idle",
+    "false:false:false": "idle",
   };
   return states[key]!;
 }
@@ -107,7 +111,12 @@ export function feedbackView(item: PresentedQuestion, selected: number | undefin
  * @returns Navigator-button HTML.
  */
 export function navigatorButton(question: Question, index: number, current: number, answeredIds: ReadonlySet<string>, flaggedIds: ReadonlySet<string>): string {
-  const states = { active: "border-ink-900 bg-ink-900 text-white", flagged: "border-amber-500 bg-amber-50 text-amber-900", answered: "border-sky-400 bg-sky-50 text-sky-900", idle: "border-slate-300 bg-white text-slate-600" };
+  const states = {
+    active: "border-ink-900 bg-ink-900 text-white",
+    flagged: "border-amber-500 bg-amber-50 text-amber-900",
+    answered: "border-sky-400 bg-sky-50 text-sky-900",
+    idle: "border-slate-300 bg-white text-slate-600",
+  };
   const state = navigatorState(index, current, answeredIds.has(question.id), flaggedIds.has(question.id));
   const labels = { true: ", answered", false: "" };
   const flags = { true: ", flagged", false: "" };
@@ -125,8 +134,14 @@ export function navigatorButton(question: Question, index: number, current: numb
 function navigatorState(index: number, current: number, answered: boolean, flagged: boolean): "active" | "flagged" | "answered" | "idle" {
   const key = `${index === current}:${flagged}:${answered}`;
   const states: Record<string, "active" | "flagged" | "answered" | "idle"> = {
-    "true:true:true": "active", "true:true:false": "active", "true:false:true": "active", "true:false:false": "active",
-    "false:true:true": "flagged", "false:true:false": "flagged", "false:false:true": "answered", "false:false:false": "idle",
+    "true:true:true": "active",
+    "true:true:false": "active",
+    "true:false:true": "active",
+    "true:false:false": "active",
+    "false:true:true": "flagged",
+    "false:true:false": "flagged",
+    "false:false:true": "answered",
+    "false:false:false": "idle",
   };
   return states[key]!;
 }

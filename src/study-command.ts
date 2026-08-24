@@ -211,7 +211,7 @@ async function askQuestion(question: Question, index: number, total: number, opt
  * @returns The raw answer.
  */
 async function readAnswer(reader: Interface | undefined, supplied?: string): Promise<string> {
-  return reader === undefined ? supplied ?? "S" : reader.question("Answer (A-D or S to skip): ");
+  return reader === undefined ? (supplied ?? "S") : reader.question("Answer (A-D or S to skip): ");
 }
 
 /**
@@ -237,7 +237,10 @@ function printScore(questions: readonly Question[], answers: readonly AnswerResu
   const correctCount = answers.filter(({ correct }) => correct).length;
   const percent = Math.round((correctCount / answers.length) * 100);
   output.write(`\nScore: ${correctCount}/${answers.length} (${percent}%)\n`);
-  if (mode === "exam") questions.forEach((question, index) => { printExplanation(question, answers[index]!.correct); });
+  if (mode === "exam")
+    questions.forEach((question, index) => {
+      printExplanation(question, answers[index]!.correct);
+    });
   return percent;
 }
 
@@ -252,8 +255,12 @@ function printScore(questions: readonly Question[], answers: readonly AnswerResu
 async function saveStudySession(options: StudyOptions, startedAt: string, answers: readonly AnswerResult[]): Promise<void> {
   if (options.noSave === true) return;
   const session: SessionRecord = {
-    id: `${startedAt}-${options.seed}`, mode: options.mode ?? "study", startedAt,
-    completedAt: new Date().toISOString(), seed: options.seed, answers,
+    id: `${startedAt}-${options.seed}`,
+    mode: options.mode ?? "study",
+    startedAt,
+    completedAt: new Date().toISOString(),
+    seed: options.seed,
+    answers,
   };
   await appendSession(options.history, session);
 }

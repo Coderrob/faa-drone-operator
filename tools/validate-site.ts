@@ -50,8 +50,7 @@ function validateLinks(file: string): void {
  * @returns An error message, or undefined for a valid or external link.
  */
 function invalidLinkMessage(source: string, target: string): string | undefined {
-  return shouldValidateTarget(target) && !targetExists(target)
-    ? `${source}: broken built URL ${target}` : undefined;
+  return shouldValidateTarget(target) && !targetExists(target) ? `${source}: broken built URL ${target}` : undefined;
 }
 
 /**
@@ -91,13 +90,38 @@ function validateQuizPayloads(): void {
 }
 
 /**
+ * Validate rendered resource templates and their resource-page routes.
+ * @returns Nothing.
+ */
+function validateResourcePages(): void {
+  const resources = fs.readFileSync(path.join(output, "resources", "index.html"), "utf8");
+  const mission = fs.readFileSync(path.join(output, "learn", "mission-record", "index.html"), "utf8");
+  requireMarker(resources, 'href="/learn/mission-record/"', "Mission record does not use its rendered route.");
+  requireMarker(resources, 'href="/learn/incident-record/"', "Incident record does not use its rendered route.");
+  requireMarker(mission, "Authorization and planning", "Rendered mission record lacks template content.");
+}
+
+/**
+ * Validate the USWDS theme marker and independent-site disclosure.
+ * @returns Nothing.
+ */
+function validateTheme(): void {
+  const home = fs.readFileSync(path.join(output, "index.html"), "utf8");
+  requireMarker(home, 'data-design-system="uswds"', "Home page lacks the USWDS theme marker.");
+  requireMarker(home, "Not an official FAA or U.S. government website.", "Home page lacks the independent-site disclosure.");
+  requireMarker(home, "Part 107 Flight Desk", "USWDS identifier lacks the site identity.");
+}
+
+/**
  * Validate expected capabilities in generated JavaScript.
  * @param files - All generated file paths.
  * @returns Nothing.
  */
 function validateScripts(files: string[]): void {
-  const scripts = files.filter((file) => file.endsWith(".js"))
-    .map((file) => fs.readFileSync(file, "utf8")).join("\n");
+  const scripts = files
+    .filter((file) => file.endsWith(".js"))
+    .map((file) => fs.readFileSync(file, "utf8"))
+    .join("\n");
   for (const marker of ["localStorage", "part107:web", "expiresAt", ":choices"]) {
     requireMarker(scripts, marker, `Browser bundle lacks expected capability marker: ${marker}`);
   }
@@ -142,7 +166,7 @@ function outputExists(): boolean {
  * @returns Nothing.
  */
 function validatePageCount(count: number): void {
-  if (count < 31) errors.push(`Expected at least 31 HTML pages; found ${count}.`);
+  if (count < 34) errors.push(`Expected at least 34 HTML pages; found ${count}.`);
 }
 
 /**
@@ -156,6 +180,8 @@ function main(): void {
   validatePageCount(htmlFiles.length);
   htmlFiles.forEach(validateLinks);
   validateQuizPayloads();
+  validateResourcePages();
+  validateTheme();
   validateScripts(files);
   validateWorkflow();
   if (reportErrors()) return;
