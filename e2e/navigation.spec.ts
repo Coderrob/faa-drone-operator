@@ -21,3 +21,10 @@ test("mobile navigation opens and reaches the mock exam", async ({ page, isMobil
   await page.locator("#mobile-nav").getByRole("link", { name: "Mock exam" }).click();
   await expect(page).toHaveURL(/\/exam\/$/);
 });
+
+test("should hide the mobile menu control in desktop navigation", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop-only navigation assertion");
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Open navigation" })).toBeHidden();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+});
