@@ -1,23 +1,25 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Question } from "../../src/types";
-import { answerLocked, cancelFinish, currentIndex, formValue, historyEntry, matchesFilters, newSession, timerExpiry, validIndex } from "../../web/lib/quiz-controller";
+import { answerLocked, cancelFinish, currentIndex, formValue, historyEntry, matchesFilters, newSession, timerExpiry, validIndex } from "./quiz-controller";
 
 const question = { id: "q1", area: "I", topic: "Rules" } as Question;
 
+afterEach(() => vi.unstubAllGlobals());
+
 describe("quiz controller utilities", () => {
-  it("filters questions", () => {
+  it("should filter questions", () => {
     expect(matchesFilters(question, "", "")).toBe(true);
     expect(matchesFilters(question, "I", "rule")).toBe(true);
     expect(matchesFilters(question, "II", "rule")).toBe(false);
     expect(matchesFilters(question, "I", "weather")).toBe(false);
   });
 
-  it("builds study and exam sessions", () => {
+  it("should build study and exam sessions", () => {
     expect(newSession("study", "s", [question]).questionIds).toEqual(["q1"]);
     expect(newSession("exam", "s", [question], { form: "A", expiresAt: 10 }).form).toBe("A");
   });
 
-  it("evaluates session controls", () => {
+  it("should evaluate session controls", () => {
     expect(answerLocked("study", 1)).toBe(true);
     expect(answerLocked("exam", 1)).toBe(false);
     expect(validIndex(0, 1)).toBe(true);
@@ -26,7 +28,7 @@ describe("quiz controller utilities", () => {
 });
 
 describe("quiz controller browser values", () => {
-  it("reads values and timer state", () => {
+  it("should read values and timer state", () => {
     const data = new FormData(); data.set("field", "value");
     expect(formValue(data, "field", "fallback")).toBe("value");
     expect(formValue(data, "missing", "fallback")).toBe("fallback");
@@ -40,7 +42,7 @@ describe("quiz controller browser values", () => {
 });
 
 describe("quiz completion utilities", () => {
-  it("confirms only incomplete exams", () => {
+  it("should confirm only incomplete exams", () => {
     vi.stubGlobal("confirm", vi.fn(() => false));
     expect(cancelFinish(false, "exam", 0, 1)).toBe(true);
     vi.stubGlobal("confirm", vi.fn(() => true));
@@ -48,7 +50,7 @@ describe("quiz completion utilities", () => {
     expect(cancelFinish(true, "exam", 0, 1)).toBe(false);
   });
 
-  it("builds history with optional form", () => {
+  it("should build history with optional form", () => {
     const study = newSession("study", "s", [question]);
     const exam = newSession("exam", "s", [question], { form: "A", expiresAt: 10 });
     expect(historyEntry("study", study, 1, 1, 100).form).toBeUndefined();

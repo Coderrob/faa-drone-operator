@@ -18,6 +18,23 @@ configuration, and tooling code.
   are verified through Playwright and subprocess integration tests.
 - New Node-based tooling is written in TypeScript; `.mjs` source files are not
   permitted.
+- Unit tests are colocated with their production modules as `name.test.ts`.
+  Every module included in Vitest coverage has exactly one adjacent test file;
+  browser and process entrypoints use the colocated domain modules plus the
+  Playwright/subprocess integration suites.
+- Every `it(...)` title starts with `should`; ESLint enforces the convention.
+
+## FAST unit tests
+
+Unit tests must be:
+
+- **Fast:** avoid network access, arbitrary waits, browsers, and full application
+  startup. Those belong in integration or Playwright suites.
+- **Autonomous:** do not depend on execution order or shared mutable state. Use
+  unique temporary paths and restore mocks and stubbed globals after each test.
+- **Self-validating:** express pass/fail through assertions without manual log or
+  artifact inspection.
+- **Timely:** add or update the adjacent test in the same change as its module.
 
 ## Local verification
 

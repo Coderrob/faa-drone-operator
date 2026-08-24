@@ -55,7 +55,7 @@
     "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "dev:cli": "tsx src/cli.ts",
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "lint": "eslint src web tools test e2e *.ts",
+    "lint": "eslint src web tools e2e *.ts",
     "quality": "npm run lint && npm run typecheck:tools && npm run test:coverage",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

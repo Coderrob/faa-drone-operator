@@ -1,22 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { parseAnswer, presentQuestion, selectQuestions } from "../src/quiz.js";
-import { loadQuestions } from "../src/questions.js";
+import { parseAnswer, presentQuestion, selectQuestions } from "./quiz.js";
+import { loadQuestions } from "./questions.js";
 
 describe("quiz engine", () => {
-  it("selects a deterministic subset", () => {
+  it("should select a deterministic subset", () => {
     const questions = loadQuestions();
     expect(selectQuestions(questions, 3, "fixed").map(({ id }) => id)).toEqual(
       selectQuestions(questions, 3, "fixed").map(({ id }) => id),
     );
   });
 
-  it("preserves the correct answer while shuffling choices", () => {
+  it("should preserve the correct answer while shuffling choices", () => {
     const question = loadQuestions()[0]!;
     const presented = presentQuestion(question, "fixed");
     expect(presented.choices[presented.correctIndex]).toBe(question.choices[question.correctIndex]);
   });
 
-  it("parses letters, numbers, and skips", () => {
+  it("should parse letters, numbers, and skips", () => {
     expect(parseAnswer("A")).toBe(0);
     expect(parseAnswer("4")).toBe(3);
     expect(parseAnswer("skip")).toBeNull();
@@ -24,12 +24,12 @@ describe("quiz engine", () => {
 });
 
 describe("quiz engine validation", () => {
-  it("rejects requests larger than the matching pool", () => {
+  it("should reject requests larger than the matching pool", () => {
     expect(() => selectQuestions(loadQuestions(), 1000, "fixed")).toThrow(/only/);
     expect(() => selectQuestions(loadQuestions(), 0, "fixed")).toThrow(/positive/);
   });
 
-  it("returns null for out-of-range and malformed answers", () => {
+  it("should return null for out-of-range and malformed answers", () => {
     expect(parseAnswer("E")).toBeNull();
     expect(parseAnswer("words")).toBeNull();
     expect(parseAnswer("1", 0)).toBeNull();

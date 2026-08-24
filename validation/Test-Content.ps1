@@ -49,12 +49,20 @@ $requiredFiles = @(
     'src/quiz.ts',
     'src/random.ts',
     'src/types.ts',
-    'test/questions.test.ts',
-    'test/quiz.test.ts',
-    'test/random.test.ts',
-    'test/mock-exams.test.ts',
-    'test/compliance.test.ts',
-    'test/history.test.ts',
+    'src/questions.test.ts',
+    'src/quiz.test.ts',
+    'src/random.test.ts',
+    'src/mock-exams.test.ts',
+    'src/compliance.test.ts',
+    'src/history.test.ts',
+    'src/commands.test.ts',
+    'src/study-command.test.ts',
+    'web/lib/documents.test.ts',
+    'web/lib/paths.test.ts',
+    'web/lib/quiz-controller.test.ts',
+    'web/lib/quiz-results.test.ts',
+    'web/lib/quiz-session.test.ts',
+    'web/lib/quiz-view.test.ts',
     'docs/08-study-cli.md',
     'docs/09-regulatory-index.md',
     'docs/10-flight-training-syllabus.md',
@@ -123,6 +131,39 @@ foreach ($sourceFile in $sourceFiles) {
         $relativeSource = [System.IO.Path]::GetRelativePath($projectRoot, $sourceFile.FullName)
         $failures.Add("Source file exceeds 350 physical lines: $relativeSource ($lineCount)")
     }
+}
+
+$coveredModules = @(
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'src') -File -Filter '*.ts' |
+        Where-Object { $_.Name -notlike '*.test.ts' -and $_.Name -notin @('cli.ts', 'types.ts') }
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'web/lib') -File -Filter '*.ts' |
+        Where-Object { $_.Name -notlike '*.test.ts' }
+)
+foreach ($module in $coveredModules) {
+    $testPath = [System.IO.Path]::ChangeExtension($module.FullName, '.test.ts')
+    if (-not (Test-Path -LiteralPath $testPath -PathType Leaf)) {
+        $relativeModule = [System.IO.Path]::GetRelativePath($projectRoot, $module.FullName)
+        $failures.Add("Covered module lacks an adjacent 1:1 test: $relativeModule")
+    }
+}
+
+$colocatedTests = @(
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'src') -File -Filter '*.test.ts'
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'web/lib') -File -Filter '*.test.ts'
+)
+foreach ($testFile in $colocatedTests) {
+    $moduleName = $testFile.Name -replace '\.test\.ts$', '.ts'
+    $modulePath = Join-Path $testFile.DirectoryName $moduleName
+    if (-not (Test-Path -LiteralPath $modulePath -PathType Leaf)) {
+        $relativeTest = [System.IO.Path]::GetRelativePath($projectRoot, $testFile.FullName)
+        $failures.Add("Colocated test lacks a 1:1 production module: $relativeTest")
+    }
+}
+
+$legacyUnitTests = Get-ChildItem -LiteralPath (Join-Path $projectRoot 'test') -Recurse -File -Filter '*.test.ts' -ErrorAction SilentlyContinue
+foreach ($legacyTest in $legacyUnitTests) {
+    $relativeTest = [System.IO.Path]::GetRelativePath($projectRoot, $legacyTest.FullName)
+    $failures.Add("Unit test is not colocated with its module: $relativeTest")
 }
 
 $markdownFiles = Get-ChildItem -LiteralPath $projectRoot -Recurse -File -Filter '*.md' |

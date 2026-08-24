@@ -6,5 +6,5 @@
     "rootDir": "."
   },
   "include": ["astro.config.ts", "tools/**/*.ts"],
-  "exclude": ["coverage", "dist", "dist-cli", "node_modules", "site-dist"]
+  "exclude": ["**/*.test.ts", "coverage", "dist", "dist-cli", "node_modules", "site-dist"]
 }

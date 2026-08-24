@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { selectMockForm } from "../src/mock-exams.js";
-import { loadQuestions } from "../src/questions.js";
+import { selectMockForm } from "./mock-exams.js";
+import { loadQuestions } from "./questions.js";
 
 describe("fixed mock forms", () => {
   it.each(["A", "B"])("loads form %s with 60 unique questions", (form) => {
@@ -9,11 +9,11 @@ describe("fixed mock forms", () => {
     expect(new Set(selected.map(({ id }) => id)).size).toBe(60);
   });
 
-  it("rejects unknown forms", () => {
+  it("should reject unknown forms", () => {
     expect(() => selectMockForm("Z", loadQuestions())).toThrow(/unknown mock form/);
   });
 
-  it("rejects a known form when its questions are unavailable", () => {
+  it("should reject a known form when its questions are unavailable", () => {
     expect(() => selectMockForm("a", [])).toThrow(/references missing/);
   });
 });
