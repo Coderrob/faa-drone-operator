@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { selectMockForm } from "./mock-exams.js";
 import { loadQuestions } from "./questions.js";
 
-describe("fixed mock forms", () => {
+describe("mock-exams", () => {
+describe("selectMockForm", () => {
   it.each(["A", "B"])("loads form %s with 60 unique questions", (form) => {
     const selected = selectMockForm(form, loadQuestions());
     expect(selected).toHaveLength(60);
@@ -16,4 +17,5 @@ describe("fixed mock forms", () => {
   it("should reject a known form when its questions are unavailable", () => {
     expect(() => selectMockForm("a", [])).toThrow(/references missing/);
   });
+});
 });

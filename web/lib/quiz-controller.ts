@@ -1,5 +1,5 @@
-import type { Question } from "../../src/types";
 import type { HistoryEntry, SessionState } from "./quiz-session";
+import type { Question } from "../../src/types";
 
 /** Tests optional filters.
  * @param question - Candidate question.
@@ -79,8 +79,7 @@ export function historyEntry(mode: SessionState["mode"], completed: SessionState
  */
 export function formValue(values: FormData, key: string, fallback: string): string {
   const value = values.get(key);
-  if (value === null) return fallback;
-  return String(value);
+  return typeof value === "string" ? value : fallback;
 }
 
 /** Finds a timer expiration.

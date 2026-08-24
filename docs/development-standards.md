@@ -23,6 +23,13 @@ configuration, and tooling code.
   browser and process entrypoints use the colocated domain modules plus the
   Playwright/subprocess integration suites.
 - Every `it(...)` title starts with `should`; ESLint enforces the convention.
+- Every test file has one root `describe`, with tests placed in nested
+  function-level `describe` suites; ESLint rejects top-level or shallow tests.
+- All TypeScript is checked with the type-aware `recommended`, `strict`, and
+  `stylistic` ESLint presets against `tsconfig.eslint.json`.
+- Imports are grouped and alphabetized deterministically. Duplicate imports,
+  imports after executable statements, and missing post-import spacing fail lint.
+- Type-only imports must use TypeScript's explicit type-import syntax.
 
 ## FAST unit tests
 
@@ -43,13 +50,18 @@ Install Node.js 20 or newer, then run:
 ```powershell
 npm ci
 npm run quality
-npm run typecheck:tools
+npm run lint:markdown
+npm run typecheck:all
 npm run test:coverage
 npm run check
 ```
 
 The GitHub Actions workflow runs the same release gates before uploading the
 Pages artifact. A pull request should not be merged while any gate is failing.
+Selective CI runs Markdownlint for Markdown changes, ShellCheck for POSIX shell
+changes, PSScriptAnalyzer for PowerShell changes, and the complete build, lint,
+test, Astro, content, and site-validation pipeline for TypeScript application or
+configuration changes.
 
 ## Documentation
 

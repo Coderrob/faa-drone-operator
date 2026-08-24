@@ -1,0 +1,113 @@
+name: Selective CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Detect changed areas
+    runs-on: ubuntu-latest
+    outputs:
+      markdown: ${{ steps.filter.outputs.markdown }}
+      powershell: ${{ steps.filter.outputs.powershell }}
+      shell: ${{ steps.filter.outputs.shell }}
+      typescript: ${{ steps.filter.outputs.typescript }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            markdown:
+              - '**/*.md'
+              - '.markdownlint-cli2.jsonc'
+            powershell:
+              - '**/*.ps1'
+            shell:
+              - '**/*.sh'
+              - '**/*.bash'
+              - '**/*.bats'
+            typescript:
+              - '**/*.ts'
+              - '**/*.astro'
+              - 'data/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig*.json'
+              - 'eslint.config.js'
+              - 'public/**'
+              - 'templates/**'
+              - '.github/workflows/**'
+
+  markdown:
+    name: Markdown lint
+    needs: changes
+    if: needs.changes.outputs.markdown == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:markdown
+
+  shell:
+    name: ShellCheck
+    needs: changes
+    if: needs.changes.outputs.shell == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          check_together: "yes"
+
+  powershell:
+    name: PSScriptAnalyzer
+    needs: changes
+    if: needs.changes.outputs.powershell == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Analyze PowerShell
+        shell: pwsh
+        run: |
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          Invoke-ScriptAnalyzer -Path . -Recurse -Severity Warning -EnableExit
+
+  typescript:
+    name: TypeScript full CI
+    needs: changes
+    if: needs.changes.outputs.typescript == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  required:
+    name: Selective CI result
+    if: always()
+    needs: [changes, markdown, shell, powershell, typescript]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require successful selected jobs
+        env:
+          RESULTS: ${{ join(needs.*.result, ',') }}
+        run: |
+          case ",$RESULTS," in
+            *,failure,*|*,cancelled,*) exit 1 ;;
+          esac

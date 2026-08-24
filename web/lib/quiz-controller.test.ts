@@ -1,12 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { Question } from "../../src/types";
 import { answerLocked, cancelFinish, currentIndex, formValue, historyEntry, matchesFilters, newSession, timerExpiry, validIndex } from "./quiz-controller";
+import type { Question } from "../../src/types";
 
 const question = { id: "q1", area: "I", topic: "Rules" } as Question;
 
 afterEach(() => vi.unstubAllGlobals());
 
-describe("quiz controller utilities", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("quiz-controller", () => {
+describe("matchesFilters, newSession, and session controls", () => {
   it("should filter questions", () => {
     expect(matchesFilters(question, "", "")).toBe(true);
     expect(matchesFilters(question, "I", "rule")).toBe(true);
@@ -56,4 +58,5 @@ describe("quiz completion utilities", () => {
     expect(historyEntry("study", study, 1, 1, 100).form).toBeUndefined();
     expect(historyEntry("exam", exam, 1, 1, 100).form).toBe("A");
   });
+});
 });

@@ -110,7 +110,7 @@ function handleMessage(message: unknown): void {
 }
 
 const server = http.createServer(handleRequest);
-server.listen(port, host, () => console.log(`Static test server: http://${host}:${port}/`));
+server.listen(port, host, () => { console.log(`Static test server: http://${host}:${port}/`); });
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 process.on("message", handleMessage);

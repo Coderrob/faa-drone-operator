@@ -1,16 +1,16 @@
 import { presentQuestion, selectQuestions } from "../../src/quiz";
-import type { PresentedQuestion } from "../../src/types";
-import { correctAnswerCount, formatRemaining, parseHistory, parseSession, scorePercent, toggleQuestionFlag } from "../lib/quiz-session";
-import type { HistoryEntry, QuizPayload as Payload, SessionState } from "../lib/quiz-session";
 import { answerLocked, cancelFinish, currentIndex, formValue, historyEntry, matchesFilters, newSession, timerExpiry, validIndex } from "../lib/quiz-controller";
-import { choiceButton, feedbackView, historyCards, navigatorButton } from "../lib/quiz-view";
 import { areaScores, reviewHtml, scoreSummary } from "../lib/quiz-results";
+import { correctAnswerCount, formatRemaining, parseHistory, parseSession, scorePercent, toggleQuestionFlag } from "../lib/quiz-session";
+import { choiceButton, feedbackView, historyCards, navigatorButton } from "../lib/quiz-view";
+import type { PresentedQuestion } from "../../src/types";
+import type { HistoryEntry, QuizPayload as Payload, SessionState } from "../lib/quiz-session";
 
 const areaNames: Record<string, string> = { I: "Regulations", II: "Airspace", III: "Weather", IV: "Performance", V: "Operations" };
 
 for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
   const mode = root.dataset.mode as "study" | "exam";
-  const payload = JSON.parse(root.querySelector<HTMLElement>("[data-quiz-data]")!.textContent!) as Payload;
+  const payload = JSON.parse(root.querySelector<HTMLElement>("[data-quiz-data]")!.textContent) as Payload;
   const questionsById = new Map(payload.questions.map((question) => [question.id, question]));
   const activeKey = `part107:web:${mode}:active`;
   const historyKey = "part107:web:history";
@@ -80,7 +80,7 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
    * @param seed - Session seed.
    */
   function startExam(values: FormData, seed: string): void {
-    const formId = String(values.get("form") ?? "A");
+    const formId = formValue(values, "form", "A");
     const examForm = payload.forms.find(({ id }) => id === formId);
     if (!examForm) { error.textContent = "The selected exam form is unavailable."; return; }
     const selected = examForm.questionIds.map((id) => questionsById.get(id)!).filter(Boolean);
@@ -110,7 +110,7 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     event.preventDefault();
     error.textContent = "";
     const values = new FormData(form);
-    const seed = String(values.get("seed") ?? "").trim();
+    const seed = formValue(values, "seed", "").trim();
     if (!seed) { error.textContent = "Enter a session seed."; return; }
     const starters = { exam: startExam, study: startStudy };
     starters[mode](values, seed);
@@ -135,7 +135,7 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     prompt.textContent = question.prompt; prompt.tabIndex = -1;
     const choices = element<HTMLElement>("[data-choices]");
     choices.innerHTML = item.choices.map((choice, index) => choiceButton(choice, index, selected, item.correctIndex, isStudyRevealed)).join("");
-    choices.querySelectorAll<HTMLButtonElement>("[data-choice]").forEach((button) => button.addEventListener("click", () => answer(Number(button.dataset.choice))));
+    choices.querySelectorAll<HTMLButtonElement>("[data-choice]").forEach((button) => { button.addEventListener("click", () => { answer(Number(button.dataset.choice)); }); });
     const flag = element<HTMLButtonElement>("[data-flag]");
     const flagged = state.flagged.includes(question.id);
     flag.setAttribute("aria-pressed", String(flagged));
@@ -180,7 +180,7 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-quiz-app]")) {
     const answered = new Set(Object.keys(state.answers));
     const flagged = new Set(state.flagged);
     element<HTMLElement>("[data-navigator]").innerHTML = presented.map(({ question }, index) => navigatorButton(question, index, state!.current, answered, flagged)).join("");
-    element<HTMLElement>("[data-navigator]").querySelectorAll<HTMLButtonElement>("[data-jump]").forEach((button) => button.addEventListener("click", () => navigate(Number(button.dataset.jump))));
+    element<HTMLElement>("[data-navigator]").querySelectorAll<HTMLButtonElement>("[data-jump]").forEach((button) => { button.addEventListener("click", () => { navigate(Number(button.dataset.jump)); }); });
   }
 
   /**

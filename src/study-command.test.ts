@@ -6,7 +6,7 @@ import { filterQuestions, loadQuestions } from "./questions.js";
 import { presentQuestion, selectQuestions } from "./quiz.js";
 import type { StudyOptions } from "./study-command.js";
 
-const reader = vi.hoisted(() => ({ question: vi.fn(async () => "S"), close: vi.fn() }));
+const reader = vi.hoisted(() => ({ question: vi.fn(() => Promise.resolve("S")), close: vi.fn() }));
 vi.mock("node:readline/promises", () => ({ createInterface: vi.fn(() => reader) }));
 
 afterEach(() => vi.restoreAllMocks());
@@ -19,7 +19,9 @@ const baseOptions: StudyOptions = {
   history: "unused-history.json", noSave: true,
 };
 
-describe("interactive study command", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("study-command", () => {
+describe("runStudy interactive mode", () => {
   it("should prompt for an answer and always close its reader", async () => {
     const { runStudy } = await import("./study-command.js");
     expect(await runStudy({ count: 1, seed: "interactive", history: "unused.json", noSave: true })).toBe(2);
@@ -56,4 +58,5 @@ describe("study command sessions", () => {
     expect([0, 2]).toContain(await runStudy({ ...baseOptions, history, remediate: true }));
     await expect(runStudy({ ...baseOptions, history, due: true, today: "2000-01-01" })).rejects.toThrow(/no questions/);
   });
+});
 });

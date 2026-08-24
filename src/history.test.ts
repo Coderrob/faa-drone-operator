@@ -16,7 +16,9 @@ function history(correct: boolean, completedAt: string): HistoryFile {
   return { version: 1, sessions: [{ id: "s", mode: "study", seed: "x", startedAt: completedAt, completedAt, answers: [{ questionId: "Q", acsCode: "UA.I.A.K1", selectedIndex: 0, correct }] }] };
 }
 
-describe("spaced review", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("history", () => {
+describe("dueQuestionIds", () => {
   it("should schedule an incorrect answer after one day", () => {
     expect(dueQuestionIds(history(false, "2026-08-20T00:00:00Z"), new Date("2026-08-21T00:00:00Z"))).toEqual(new Set(["Q"]));
   });
@@ -52,7 +54,8 @@ describe("spaced review persistence", () => {
     expect(await readHistory(path)).toEqual({ version: 1, sessions: [] });
     const session = history(false, "2026-08-20T00:00:00Z").sessions[0]!;
     await appendSession(path, session);
-    expect(JSON.parse(await readFile(path, "utf8")).sessions).toHaveLength(1);
+    const saved = JSON.parse(await readFile(path, "utf8")) as HistoryFile;
+    expect(saved.sessions).toHaveLength(1);
   });
 
   it("should reject unsupported history and track latest remediation state", async () => {
@@ -64,4 +67,5 @@ describe("spaced review persistence", () => {
     expect(remediationIds(source)).toEqual(new Set(["Q"]));
     expect(dueQuestionIds(source, new Date())).toEqual(new Set());
   });
+});
 });

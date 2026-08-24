@@ -1,5 +1,5 @@
-import questionsJson from "../data/questions.json" with { type: "json" };
 import cardQuestionsJson from "../data/card-questions.json" with { type: "json" };
+import questionsJson from "../data/questions.json" with { type: "json" };
 import type { AcsArea, Question } from "./types.js";
 
 export interface QuestionFilter {
@@ -8,7 +8,12 @@ export interface QuestionFilter {
   readonly dueIds?: ReadonlySet<string> | undefined;
 }
 
-type QuestionRule = (question: Question) => string | undefined;
+type QuestionCandidate = Omit<Question, "choices" | "correctIndex" | "original"> & {
+  readonly choices: readonly string[];
+  readonly correctIndex: number;
+  readonly original: boolean;
+};
+type QuestionRule = (question: QuestionCandidate) => string | undefined;
 const VALID_CODE = /^UA\.(I|II|III|IV|V)\.[A-F]\.K\d+[a-z]?$/;
 const QUESTION_RULES: readonly QuestionRule[] = [
   (question) => VALID_CODE.test(question.acsCode) ? undefined : "invalid ACS code",
@@ -18,7 +23,7 @@ const QUESTION_RULES: readonly QuestionRule[] = [
   (question) => question.explanation.trim().length >= 30 ? undefined : "explanation too short",
   (question) => question.remediation.trim().length >= 10 ? undefined : "remediation too short",
   (question) => question.citations.length > 0 ? undefined : "citation required",
-  (question) => question.original === true ? undefined : "must be marked original",
+  (question) => question.original ? undefined : "must be marked original",
 ];
 
 /**
@@ -26,7 +31,7 @@ const QUESTION_RULES: readonly QuestionRule[] = [
  * @param question - Question to inspect.
  * @returns Validation errors for the question.
  */
-function questionErrors(question: Question): string[] {
+function questionErrors(question: QuestionCandidate): string[] {
   return QUESTION_RULES
     .map((rule) => rule(question))
     .filter((message): message is string => message !== undefined)

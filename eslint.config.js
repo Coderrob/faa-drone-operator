@@ -1,4 +1,5 @@
 import jsdoc from "eslint-plugin-jsdoc";
+import importX from "eslint-plugin-import-x";
 import tseslint from "typescript-eslint";
 
 const infinitives = {
@@ -31,6 +32,29 @@ const shouldTitleRule = {
   },
 };
 
+const testStructureRule = {
+  meta: { messages: {
+    nested: "Each test must be inside a function-level describe nested under the file's root describe.",
+    root: "Test files must contain exactly one root describe.",
+  }, type: "suggestion" },
+  create(context) {
+    const isCall = (node, name) => node.type === "CallExpression"
+      && node.callee.type === "Identifier" && node.callee.name === name;
+    return {
+      "Program:exit"(node) {
+        const roots = node.body.filter((statement) => statement.type === "ExpressionStatement"
+          && isCall(statement.expression, "describe"));
+        if (roots.length !== 1) context.report({ node, messageId: "root" });
+      },
+      "CallExpression[callee.name='it']"(node) {
+        const describeCount = context.sourceCode.getAncestors(node)
+          .filter((ancestor) => isCall(ancestor, "describe")).length;
+        if (describeCount < 2) context.report({ node, messageId: "nested" });
+      },
+    };
+  },
+};
+
 export default tseslint.config(
   {
     ignores: [
@@ -42,12 +66,40 @@ export default tseslint.config(
       "site-dist/**",
     ],
   },
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   {
     files: ["**/*.ts"],
-    plugins: { jsdoc, project: { rules: { "should-test-title": shouldTitleRule } } },
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    plugins: {
+      "import-x": importX,
+      jsdoc,
+      project: { rules: { "should-test-title": shouldTitleRule, "test-structure": testStructureRule } },
+    },
     rules: {
+      "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "inline-type-imports" }],
+      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unnecessary-type-parameters": "off",
+      "@typescript-eslint/restrict-template-expressions": ["error", {
+        allowBoolean: true,
+        allowNumber: true,
+      }],
       complexity: ["error", 3],
+      "import-x/first": "error",
+      "import-x/newline-after-import": "error",
+      "import-x/no-duplicates": "error",
+      "import-x/order": ["error", {
+        alphabetize: { caseInsensitive: true, order: "asc" },
+        groups: ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        "newlines-between": "never",
+      }],
       "max-lines": ["error", { max: 350, skipBlankLines: false, skipComments: false }],
       "max-lines-per-function": ["error", { max: 30, skipBlankLines: false, skipComments: false, IIFEs: true }],
       "jsdoc/require-description": "error",
@@ -67,5 +119,9 @@ export default tseslint.config(
       "jsdoc/require-throws": "error",
       "project/should-test-title": "error",
     },
+  },
+  {
+    files: ["**/*.test.ts"],
+    rules: { "project/test-structure": "error" },
   },
 );

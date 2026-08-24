@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
-import type { Question } from "../../src/types";
 import { choiceButton, citationList, escapeHtml, feedbackView, historyCards, navigatorButton } from "./quiz-view";
+import type { PresentedQuestion, Question } from "../../src/types";
 
-const question = { citations: [{ label: "FAA & ACS", url: "https://example.test/?a=1&b=2", locator: "p. <1>" }] } as Question;
+const question: Question = {
+  id: "q1", acsCode: "UA.I.A.K1", area: "I", task: "Rules", topic: "Safety",
+  difficulty: 1, critical: false, prompt: "Prompt", choices: ["A", "B", "C", "D"],
+  correctIndex: 0, explanation: "A sufficiently detailed explanation for this fixture.",
+  remediation: "Review the cited source.", original: true,
+  citations: [{ label: "FAA & ACS", url: "https://example.test/?a=1&b=2", locator: "p. <1>" }],
+};
 
-describe("quiz view utilities", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("quiz-view", () => {
+describe("escapeHtml, citationList, and choiceButton", () => {
   it("should escape all significant HTML characters", () => {
     expect(escapeHtml(`<a href='x'>&"`)).toBe("&lt;a href=&#39;x&#39;&gt;&amp;&quot;");
   });
@@ -29,7 +37,7 @@ describe("quiz view utilities", () => {
 
 describe("quiz history views", () => {
   it("should render feedback and navigator states", () => {
-    const item = { question: { ...question, id: "q1", explanation: "Why", remediation: "Review" }, choices: ["A", "B"], correctIndex: 1 } as never;
+    const item: PresentedQuestion = { question: { ...question, id: "q1", explanation: "Why", remediation: "Review" }, choices: ["A", "B"], correctIndex: 1 };
     expect(feedbackView(item, undefined, false).html).toBe("");
     expect(feedbackView(item, 1, true).html).toContain("Correct");
     expect(feedbackView(item, 0, true).html).toContain("Review this objective");
@@ -52,4 +60,5 @@ describe("quiz history views", () => {
     expect(html).toContain("Form B");
     expect(historyCards([{ mode: "exam", completedAt: "2026-01-01T00:00:00Z", correct: 0, total: 1, percent: 0 }])).toContain("Form ");
   });
+});
 });

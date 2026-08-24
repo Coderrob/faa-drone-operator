@@ -1,11 +1,11 @@
 import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
-import type { Interface } from "node:readline/promises";
 import { appendSession, dueQuestionIds, readHistory, remediationIds } from "./history.js";
 import { selectMockForm } from "./mock-exams.js";
 import { filterQuestions, loadQuestions } from "./questions.js";
 import { parseAnswer, presentQuestion, selectQuestions } from "./quiz.js";
 import type { AcsArea, AnswerResult, Question, SessionRecord } from "./types.js";
+import type { Interface } from "node:readline/promises";
 
 export interface StudyOptions {
   readonly count: number;
@@ -237,7 +237,7 @@ function printScore(questions: readonly Question[], answers: readonly AnswerResu
   const correctCount = answers.filter(({ correct }) => correct).length;
   const percent = Math.round((correctCount / answers.length) * 100);
   output.write(`\nScore: ${correctCount}/${answers.length} (${percent}%)\n`);
-  if (mode === "exam") questions.forEach((question, index) => printExplanation(question, answers[index]!.correct));
+  if (mode === "exam") questions.forEach((question, index) => { printExplanation(question, answers[index]!.correct); });
   return percent;
 }
 

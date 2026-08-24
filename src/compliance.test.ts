@@ -1,12 +1,14 @@
-import { describe, expect, it } from "vitest";
 import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { describe, expect, it } from "vitest";
 import { auditComplianceCsv, auditComplianceFile, parseCsv } from "./compliance.js";
 
 const header = "Item,Expiration/due date,Advance reminder,Responsible person,Status,Notes\n";
 
-describe("compliance audit", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("compliance", () => {
+describe("parseCsv and auditComplianceCsv", () => {
   it("should parse quoted CSV fields", () => {
     expect(parseCsv('a,"b,c"\n')).toEqual([["a", "b,c"]]);
     expect(parseCsv('"a""b",c\r\n\n')).toEqual([["a\"b", "c"]]);
@@ -53,4 +55,5 @@ describe("compliance audit edge cases", () => {
       { item: "Truncated", state: "missing" },
     ]);
   });
+});
 });

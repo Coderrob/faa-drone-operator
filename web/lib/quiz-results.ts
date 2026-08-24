@@ -1,6 +1,6 @@
-import type { PresentedQuestion } from "../../src/types";
-import type { SessionState } from "./quiz-session";
 import { citationList, escapeHtml } from "./quiz-view";
+import type { SessionState } from "./quiz-session";
+import type { PresentedQuestion } from "../../src/types";
 
 /** Renders the overall score.
  * @param mode - Quiz mode.

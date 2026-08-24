@@ -4,7 +4,9 @@ import type { Question } from "./types.js";
 
 const validQuestion = loadQuestions()[0]!;
 
-describe("canonical question data", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("questions", () => {
+describe("loadQuestions and filterQuestions", () => {
   it("should pass structural validation", () => {
     expect(validateQuestions(loadQuestions())).toEqual([]);
   });
@@ -56,4 +58,5 @@ describe("generated question metadata", () => {
     expect(generated.every(({ distractorReview }) => typeof distractorReview === "string")).toBe(true);
     expect(generated.every(({ distractorReview }) => distractorReview === "approved")).toBe(true);
   });
+});
 });

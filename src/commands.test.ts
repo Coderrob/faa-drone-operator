@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runComplianceAudit, runStats, runValidate } from "./commands.js";
+import type * as QuestionsModule from "./questions.js";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -14,7 +15,9 @@ function captureOutput() {
   return vi.spyOn(process.stdout, "write").mockImplementation(() => true);
 }
 
-describe("CLI command handlers", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("commands", () => {
+describe("runValidate", () => {
   it("should validate the canonical release collection", () => {
     const output = captureOutput();
     expect(runValidate()).toBe(0);
@@ -27,7 +30,7 @@ describe("CLI validation failures", () => {
   it("should print canonical validation errors", async () => {
     vi.resetModules();
     vi.doMock("./questions.js", async (importOriginal) => {
-      const original = await importOriginal<typeof import("./questions.js")>();
+      const original = await importOriginal<typeof QuestionsModule>();
       return { ...original, validateQuestions: vi.fn(() => ["fixture error"]) };
     });
     const output = captureOutput();
@@ -63,4 +66,5 @@ describe("CLI reporting command handlers", () => {
     await expect(runComplianceAudit(path, "invalid")).rejects.toThrow(/YYYY-MM-DD/);
     expect(output).toHaveBeenCalled();
   });
+});
 });

@@ -77,10 +77,28 @@ export async function readHistory(path: string): Promise<HistoryFile> {
  * @throws {Error} When the history format is unsupported.
  */
 function parseHistory(content: string): HistoryFile {
-  const parsed = JSON.parse(content) as HistoryFile;
-  if (parsed.version !== 1) throw new Error("unsupported history format");
-  if (!Array.isArray(parsed.sessions)) throw new Error("unsupported history format");
-  return parsed;
+  const parsed: unknown = JSON.parse(content);
+  if (!isHistoryShape(parsed)) throw new Error("unsupported history format");
+  return parsed as HistoryFile;
+}
+
+/**
+ * Checks the persisted history envelope before it is trusted.
+ * @param value - Parsed JSON value.
+ * @returns Whether the supported version and session collection are present.
+ */
+function isHistoryShape(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return value.version === 1 && Array.isArray(value.sessions);
+}
+
+/**
+ * Narrows an unknown JSON value to a keyed object.
+ * @param value - Candidate JSON value.
+ * @returns Whether the value is a non-null object.
+ */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }
 
 /**

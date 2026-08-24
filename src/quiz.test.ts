@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { parseAnswer, presentQuestion, selectQuestions } from "./quiz.js";
 import { loadQuestions } from "./questions.js";
+import { parseAnswer, presentQuestion, selectQuestions } from "./quiz.js";
 
-describe("quiz engine", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("quiz", () => {
+describe("selectQuestions, presentQuestion, and parseAnswer", () => {
   it("should select a deterministic subset", () => {
     const questions = loadQuestions();
     expect(selectQuestions(questions, 3, "fixed").map(({ id }) => id)).toEqual(
@@ -34,4 +36,5 @@ describe("quiz engine validation", () => {
     expect(parseAnswer("words")).toBeNull();
     expect(parseAnswer("1", 0)).toBeNull();
   });
+});
 });

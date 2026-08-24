@@ -1,6 +1,5 @@
-import type { Question } from "../../src/types";
 import type { HistoryEntry } from "./quiz-session";
-import type { PresentedQuestion } from "../../src/types";
+import type { Question, PresentedQuestion  } from "../../src/types";
 
 const entities: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
 const choiceClasses = {

@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { getDocument, getDocuments, renderDocument, rewriteLinks } from "./documents";
 
-describe("learning documents", () => {
+// eslint-disable-next-line max-lines-per-function -- Root suite groups function-level describes.
+describe("documents", () => {
+describe("getDocuments, getDocument, renderDocument, and rewriteLinks", () => {
   it("should return a fresh ordered catalog and resolve slugs", () => {
     const first = getDocuments();
     const second = getDocuments();
@@ -29,4 +31,5 @@ describe("learning documents", () => {
     expect(rewriteLinks("[outside](../../outside.md)", "docs/index.md"))
       .toBe("[outside](../../outside.md)");
   });
+});
 });

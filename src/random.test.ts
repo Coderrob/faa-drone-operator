@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { seededRandom, shuffled } from "./random.js";
 
-describe("seeded randomization", () => {
+describe("random", () => {
+describe("seededRandom and shuffled", () => {
   it("should be deterministic for the same seed", () => {
     expect(shuffled([1, 2, 3, 4, 5], seededRandom("same"))).toEqual(
       shuffled([1, 2, 3, 4, 5], seededRandom("same")),
@@ -13,4 +14,5 @@ describe("seeded randomization", () => {
     shuffled(input, seededRandom("seed"));
     expect(input).toEqual([1, 2, 3]);
   });
+});
 });
