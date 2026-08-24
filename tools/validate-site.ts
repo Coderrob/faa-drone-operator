@@ -50,8 +50,7 @@ function validateLinks(file: string): void {
  * @returns An error message, or undefined for a valid or external link.
  */
 function invalidLinkMessage(source: string, target: string): string | undefined {
-  return shouldValidateTarget(target) && !targetExists(target)
-    ? `${source}: broken built URL ${target}` : undefined;
+  return shouldValidateTarget(target) && !targetExists(target) ? `${source}: broken built URL ${target}` : undefined;
 }
 
 /**
@@ -108,8 +107,10 @@ function validateResourcePages(): void {
  * @returns Nothing.
  */
 function validateScripts(files: string[]): void {
-  const scripts = files.filter((file) => file.endsWith(".js"))
-    .map((file) => fs.readFileSync(file, "utf8")).join("\n");
+  const scripts = files
+    .filter((file) => file.endsWith(".js"))
+    .map((file) => fs.readFileSync(file, "utf8"))
+    .join("\n");
   for (const marker of ["localStorage", "part107:web", "expiresAt", ":choices"]) {
     requireMarker(scripts, marker, `Browser bundle lacks expected capability marker: ${marker}`);
   }

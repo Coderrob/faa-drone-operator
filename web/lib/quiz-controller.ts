@@ -23,7 +23,16 @@ export function matchesFilters(question: Question, area: string, topic: string):
  * @returns Session state.
  */
 export function newSession(mode: SessionState["mode"], seed: string, questions: Question[], exam?: { form: string; expiresAt: number }): SessionState {
-  const common = { version: 1 as const, mode, seed, questionIds: questions.map(({ id }) => id), current: 0, answers: {}, flagged: [], startedAt: new Date().toISOString() };
+  const common = {
+    version: 1 as const,
+    mode,
+    seed,
+    questionIds: questions.map(({ id }) => id),
+    current: 0,
+    answers: {},
+    flagged: [],
+    startedAt: new Date().toISOString(),
+  };
   if (!exam) return common;
   return { ...common, ...exam };
 }
@@ -42,7 +51,9 @@ export function answerLocked(mode: SessionState["mode"], answer: number | undefi
  * @param length - Collection length.
  * @returns Validity.
  */
-export function validIndex(index: number, length: number): boolean { return [index >= 0, index < length].every(Boolean); }
+export function validIndex(index: number, length: number): boolean {
+  return [index >= 0, index < length].every(Boolean);
+}
 
 /** Confirms incomplete exams.
  * @param force - Confirmation bypass.
@@ -96,4 +107,6 @@ export function timerExpiry(mode: SessionState["mode"], state: SessionState | un
  * @param state - Optional session.
  * @returns Current index or zero.
  */
-export function currentIndex(state: SessionState | undefined): number { return state?.current ?? 0; }
+export function currentIndex(state: SessionState | undefined): number {
+  return state?.current ?? 0;
+}

@@ -2,4 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { sitePath } from "../lib/paths";
 ---
-<BaseLayout title="Page not found" description="The requested page could not be found."><section class="container-shell py-24 text-center"><p class="eyebrow">404 · Off course</p><h1 class="mt-4 font-display text-5xl font-bold text-ink-950">That route is not in the flight plan.</h1><p class="mx-auto mt-5 max-w-xl text-lg text-slate-600">Return to the learning library or start a study session.</p><div class="mt-8 flex justify-center gap-3"><a class="button-primary" href={sitePath("/learn/")}>Browse guides</a><a class="button-secondary" href={sitePath("/study/")}>Study cards</a></div></section></BaseLayout>
+
+<BaseLayout title="Page not found" description="The requested page could not be found."
+  ><section class="container-shell py-24 text-center">
+    <p class="eyebrow">404 · Off course</p><h1 class="mt-4 font-display text-5xl font-bold text-ink-950">That route is not in the flight plan.</h1><p class="mx-auto mt-5 max-w-xl text-lg text-slate-600">
+      Return to the learning library or start a study session.
+    </p><div class="mt-8 flex justify-center gap-3">
+      <a class="button-primary" href={sitePath("/learn/")}>Browse guides</a><a class="button-secondary" href={sitePath("/study/")}>Study cards</a>
+    </div>
+  </section></BaseLayout
+>

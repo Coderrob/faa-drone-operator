@@ -2,10 +2,14 @@
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
-interface Props { title: string; description: string; }
+interface Props {
+  title: string;
+  description: string;
+}
 const { title, description } = Astro.props;
 const fullTitle = title === "Part 107 Flight Desk" ? title : `${title} | Part 107 Flight Desk`;
 ---
+
 <!doctype html>
 <html lang="en">
   <head>

@@ -1,0 +1,17 @@
+.astro/
+coverage/
+dist/
+dist-cli/
+node_modules/
+playwright-report/
+site/
+site-dist/
+test-results/
+
+data/
+study/
+templates/
+trackers/
+validation/
+*.md
+package-lock.json

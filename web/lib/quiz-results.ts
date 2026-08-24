@@ -24,7 +24,9 @@ export function scoreSummary(mode: SessionState["mode"], correct: number, total:
  * @returns Cards HTML.
  */
 export function areaScores(presented: PresentedQuestion[], completed: SessionState, names: Record<string, string>): string {
-  return Object.keys(names).map((area) => areaScore(area, presented, completed, names)).join("");
+  return Object.keys(names)
+    .map((area) => areaScore(area, presented, completed, names))
+    .join("");
 }
 
 /** Renders one area card.

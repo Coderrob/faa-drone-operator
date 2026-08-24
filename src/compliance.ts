@@ -128,8 +128,14 @@ function openQuotedField(state: CsvState): void {
  * @returns One when an escaped quote consumes the following character.
  */
 function consumeQuoted(character: string, next: string | undefined, state: CsvState): number {
-  if (character !== '"') { state.field += character; return 0; }
-  if (next === '"') { state.field += '"'; return 1; }
+  if (character !== '"') {
+    state.field += character;
+    return 0;
+  }
+  if (next === '"') {
+    state.field += '"';
+    return 1;
+  }
   state.quoted = false;
   return 0;
 }
@@ -144,7 +150,12 @@ function finishField(state: CsvState): void {
   state.field = "";
 }
 
-interface CsvState { field: string; quoted: boolean; row: string[]; rows: string[][] }
+interface CsvState {
+  field: string;
+  quoted: boolean;
+  row: string[];
+  rows: string[][];
+}
 
 /**
  * Completes the current CSV row.

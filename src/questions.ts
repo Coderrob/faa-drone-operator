@@ -16,14 +16,14 @@ type QuestionCandidate = Omit<Question, "choices" | "correctIndex" | "original">
 type QuestionRule = (question: QuestionCandidate) => string | undefined;
 const VALID_CODE = /^UA\.(I|II|III|IV|V)\.[A-F]\.K\d+[a-z]?$/;
 const QUESTION_RULES: readonly QuestionRule[] = [
-  (question) => VALID_CODE.test(question.acsCode) ? undefined : "invalid ACS code",
-  (question) => question.choices.length === 4 ? undefined : "must have four choices",
-  (question) => new Set(question.choices).size === 4 ? undefined : "choices must be unique",
-  (question) => question.correctIndex >= 0 && question.correctIndex <= 3 ? undefined : "invalid correctIndex",
-  (question) => question.explanation.trim().length >= 30 ? undefined : "explanation too short",
-  (question) => question.remediation.trim().length >= 10 ? undefined : "remediation too short",
-  (question) => question.citations.length > 0 ? undefined : "citation required",
-  (question) => question.original ? undefined : "must be marked original",
+  (question) => (VALID_CODE.test(question.acsCode) ? undefined : "invalid ACS code"),
+  (question) => (question.choices.length === 4 ? undefined : "must have four choices"),
+  (question) => (new Set(question.choices).size === 4 ? undefined : "choices must be unique"),
+  (question) => (question.correctIndex >= 0 && question.correctIndex <= 3 ? undefined : "invalid correctIndex"),
+  (question) => (question.explanation.trim().length >= 30 ? undefined : "explanation too short"),
+  (question) => (question.remediation.trim().length >= 10 ? undefined : "remediation too short"),
+  (question) => (question.citations.length > 0 ? undefined : "citation required"),
+  (question) => (question.original ? undefined : "must be marked original"),
 ];
 
 /**
@@ -32,8 +32,7 @@ const QUESTION_RULES: readonly QuestionRule[] = [
  * @returns Validation errors for the question.
  */
 function questionErrors(question: QuestionCandidate): string[] {
-  return QUESTION_RULES
-    .map((rule) => rule(question))
+  return QUESTION_RULES.map((rule) => rule(question))
     .filter((message): message is string => message !== undefined)
     .map((message) => `${question.id}: ${message}`);
 }
@@ -43,10 +42,7 @@ function questionErrors(question: QuestionCandidate): string[] {
  * @returns The combined canonical question collection.
  */
 export function loadQuestions(): readonly Question[] {
-  return [
-    ...(questionsJson as unknown as readonly Question[]),
-    ...(cardQuestionsJson as unknown as readonly Question[]),
-  ];
+  return [...(questionsJson as unknown as readonly Question[]), ...(cardQuestionsJson as unknown as readonly Question[])];
 }
 
 /**
@@ -55,10 +51,7 @@ export function loadQuestions(): readonly Question[] {
  * @param filter - Optional selection constraints.
  * @returns Questions matching every supplied constraint.
  */
-export function filterQuestions(
-  questions: readonly Question[],
-  filter: QuestionFilter,
-): Question[] {
+export function filterQuestions(questions: readonly Question[], filter: QuestionFilter): Question[] {
   const topic = filter.topic?.trim().toLocaleLowerCase();
   return questions.filter((question) => matchesFilter(question, filter, topic));
 }

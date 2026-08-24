@@ -3,29 +3,67 @@ import QuizSetup from "./QuizSetup.astro";
 import QuizProgress from "./QuizProgress.astro";
 import RecentResults from "./RecentResults.astro";
 import type { Question } from "../../src/types";
-interface MockForm { id: string; title: string; timeLimitMinutes: number; passingPercent: number; questionIds: string[]; }
-interface Props { mode: "study" | "exam"; questions: Question[]; forms?: MockForm[]; }
+interface MockForm {
+  id: string;
+  title: string;
+  timeLimitMinutes: number;
+  passingPercent: number;
+  questionIds: string[];
+}
+interface Props {
+  mode: "study" | "exam";
+  questions: Question[];
+  forms?: MockForm[];
+}
 const { mode, questions, forms = [] } = Astro.props;
 const payload = JSON.stringify({ questions, forms }).replaceAll("<", "\\u003c");
 ---
+
 <div data-quiz-app data-mode={mode}>
   <script type="application/json" data-quiz-data set:html={payload} />
   <QuizSetup mode={mode} />
   <RecentResults />
   <section data-session-panel class="hidden" aria-label={mode === "exam" ? "Mock exam" : "Study session"}>
     <div class="panel overflow-hidden">
-      <div class="border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-8"><div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center"><QuizProgress /><div class="flex items-center gap-3"><span data-timer class:list={["rounded-md bg-ink-900 px-3 py-2 font-mono text-sm font-bold text-white", mode === "study" && "hidden"]}>02:00:00</span><button data-exit type="button" class="text-sm font-bold text-slate-600 hover:text-red-700">Save & exit</button></div></div></div>
+      <div class="border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-8">
+        <div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
+          <QuizProgress /><div class="flex items-center gap-3">
+            <span data-timer class:list={["rounded-md bg-ink-900 px-3 py-2 font-mono text-sm font-bold text-white", mode === "study" && "hidden"]}>02:00:00</span><button
+              data-exit
+              type="button"
+              class="text-sm font-bold text-slate-600 hover:text-red-700">Save & exit</button
+            >
+          </div>
+        </div>
+      </div>
       <div class="p-5 sm:p-8 lg:p-10">
-        <div class="flex flex-wrap items-center justify-between gap-3"><span data-acs-code class="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-800"></span><button data-flag type="button" class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-600" aria-pressed="false">Flag for review</button></div>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span data-acs-code class="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-800"></span><button
+            data-flag
+            type="button"
+            class="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-600"
+            aria-pressed="false">Flag for review</button
+          >
+        </div>
         <h2 data-prompt class="mt-6 max-w-4xl font-display text-2xl font-bold leading-9 text-ink-950 sm:text-3xl"></h2>
         <div data-choices class="mt-7 grid gap-3" role="group" aria-label="Answer choices"></div>
         <div data-feedback class="mt-6 hidden rounded-xl border p-5" aria-live="polite"></div>
       </div>
-      <div class="flex items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-5 py-4 sm:px-8"><button data-previous type="button" class="button-secondary">Previous</button><button data-next type="button" class="button-primary">Next question</button></div>
+      <div class="flex items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-5 py-4 sm:px-8">
+        <button data-previous type="button" class="button-secondary">Previous</button><button data-next type="button" class="button-primary">Next question</button>
+      </div>
     </div>
     <div data-navigator class="mt-5 flex flex-wrap gap-2" aria-label="Question navigator"></div>
     <p class="mt-4 text-center text-xs text-slate-500">Keyboard: 1–4 answer · ←/→ navigate · F flag</p>
   </section>
-  <section data-results class="hidden panel p-6 sm:p-9" aria-labelledby="results-title"><p class="eyebrow">Session complete</p><h2 id="results-title" class="mt-2 font-display text-3xl font-bold text-ink-950">Your results</h2><div data-score-summary class="mt-7"></div><div data-area-scores class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"></div><div data-review class="mt-10 space-y-5"></div><div class="mt-8 flex flex-wrap gap-3 border-t border-slate-200 pt-6"><button data-new-session type="button" class="button-primary">Start another session</button><button data-clear-history type="button" class="button-secondary">Clear saved history</button></div></section>
+  <section data-results class="hidden panel p-6 sm:p-9" aria-labelledby="results-title">
+    <p class="eyebrow">Session complete</p><h2 id="results-title" class="mt-2 font-display text-3xl font-bold text-ink-950">Your results</h2><div data-score-summary class="mt-7"></div><div
+      data-area-scores
+      class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"
+    >
+    </div><div data-review class="mt-10 space-y-5"></div><div class="mt-8 flex flex-wrap gap-3 border-t border-slate-200 pt-6">
+      <button data-new-session type="button" class="button-primary">Start another session</button><button data-clear-history type="button" class="button-secondary">Clear saved history</button>
+    </div>
+  </section>
 </div>
 <script src="../scripts/quiz-app.ts"></script>
