@@ -6,6 +6,13 @@ interface MockForm {
   readonly questionIds: readonly string[];
 }
 
+/**
+ * Resolves a fixed mock-exam form against the canonical question collection.
+ * @param formId - Case-insensitive mock form identifier.
+ * @param questions - Canonical questions indexed by the form.
+ * @returns Questions in the form's prescribed order.
+ * @throws {Error} When the form is unknown or references a missing question.
+ */
 export function selectMockForm(
   formId: string,
   questions: readonly Question[],

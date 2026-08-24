@@ -12,4 +12,8 @@ describe("fixed mock forms", () => {
   it("rejects unknown forms", () => {
     expect(() => selectMockForm("Z", loadQuestions())).toThrow(/unknown mock form/);
   });
+
+  it("rejects a known form when its questions are unavailable", () => {
+    expect(() => selectMockForm("a", [])).toThrow(/references missing/);
+  });
 });

@@ -64,7 +64,7 @@ all internal links and bundled assets are generated from the domain root.
 - `web/lib/documents.ts` curates and renders source Markdown at build time.
 - `web/scripts/quiz-app.ts` owns accessible browser quiz/exam state.
 - `web/styles/global.css` defines Tailwind design tokens and document typography.
-- `tools/validate-site.mjs` verifies production routes, assets, base paths, and
+- `tools/validate-site.ts` verifies production routes, assets, base paths, and
   quiz payloads.
 
 ## Quiz behavior and privacy

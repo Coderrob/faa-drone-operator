@@ -30,9 +30,12 @@ const links = [
 <script>
   const toggle = document.querySelector<HTMLButtonElement>("#menu-toggle");
   const nav = document.querySelector<HTMLElement>("#mobile-nav");
-  toggle?.addEventListener("click", () => {
+  /** Toggles the mobile navigation and its accessible expanded state. */
+  function toggleNavigation(): void {
+    if (!toggle) return;
     const expanded = toggle.getAttribute("aria-expanded") === "true";
     toggle.setAttribute("aria-expanded", String(!expanded));
     nav?.classList.toggle("hidden", expanded);
-  });
+  }
+  toggle?.addEventListener("click", toggleNavigation);
 </script>

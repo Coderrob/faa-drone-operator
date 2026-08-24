@@ -3,6 +3,9 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $requiredFiles = @(
     'README.md',
+    'mkdocs.yml',
+    'docs/index.md',
+    'docs/development-standards.md',
     'docs/00-faa-source-content.md',
     'docs/01-certification-roadmap.md',
     'docs/02-acs-study-guide.md',
@@ -31,6 +34,7 @@ $requiredFiles = @(
     'validation/site-completion-report.md',
     'package.json',
     'tsconfig.json',
+    'tsconfig.tools.json',
     'data/questions.json',
     'data/acs-elements.csv',
     'data/card-questions.json',
@@ -70,15 +74,15 @@ $requiredFiles = @(
     'tools/Update-AcsCardMappings.ps1',
     'tools/Build-QuestionBank.ps1'
     'tools/Build-MockExamDocs.ps1'
-    'astro.config.mjs'
+    'astro.config.ts'
     '.github/workflows/deploy-pages.yml'
     'web/pages/index.astro'
     'web/pages/study.astro'
     'web/pages/exam.astro'
     'web/scripts/quiz-app.ts'
-    'tools/validate-site.mjs'
-    'tools/serve-site.mjs'
-    'tools/run-e2e.mjs'
+    'tools/validate-site.ts'
+    'tools/serve-site.ts'
+    'tools/run-e2e.ts'
     'playwright.config.ts'
     'vitest.config.ts'
     'e2e/navigation.spec.ts'
@@ -98,6 +102,26 @@ foreach ($relativePath in $requiredFiles) {
     $fullPath = Join-Path $projectRoot $relativePath
     if (-not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
         $failures.Add("Missing required artifact: $relativePath")
+    }
+}
+
+$legacyModules = Get-ChildItem -LiteralPath $projectRoot -Recurse -File -Filter '*.mjs' |
+    Where-Object { $_.FullName -notmatch '[\\/](node_modules|dist|site-dist)[\\/]' }
+foreach ($legacyModule in $legacyModules) {
+    $relativeModule = [System.IO.Path]::GetRelativePath($projectRoot, $legacyModule.FullName)
+    $failures.Add("Legacy .mjs source is not permitted: $relativeModule")
+}
+
+$sourceFiles = Get-ChildItem -LiteralPath $projectRoot -Recurse -File |
+    Where-Object {
+        $_.Extension -in @('.ts', '.astro', '.js') -and
+        $_.FullName -notmatch '[\\/](node_modules|coverage|dist|dist-cli|site-dist)[\\/]'
+    }
+foreach ($sourceFile in $sourceFiles) {
+    $lineCount = @(Get-Content -LiteralPath $sourceFile.FullName).Count
+    if ($lineCount -gt 350) {
+        $relativeSource = [System.IO.Path]::GetRelativePath($projectRoot, $sourceFile.FullName)
+        $failures.Add("Source file exceeds 350 physical lines: $relativeSource ($lineCount)")
     }
 }
 

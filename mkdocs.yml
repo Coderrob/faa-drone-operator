@@ -1,0 +1,37 @@
+site_name: Part 107 Flight Desk
+site_description: FAA Part 107 certification, study, flight, and compliance guidance
+site_url: https://faadroneoperator.com/
+repo_url: https://github.com/Coderrob/faa-drone-operator
+repo_name: Coderrob/faa-drone-operator
+docs_dir: docs
+theme:
+  name: readthedocs
+  highlightjs: true
+nav:
+  - Home: index.md
+  - Certification:
+      - FAA source content: 00-faa-source-content.md
+      - Certification roadmap: 01-certification-roadmap.md
+      - Registration processes: 06-registration-processes.md
+      - Registration scenarios: 11-registration-scenarios.md
+  - Study:
+      - ACS study guide: 02-acs-study-guide.md
+      - 14-day study plan: 03-study-plan.md
+      - Glossary and memory sheet: 05-glossary-memory-sheet.md
+      - Domain knowledge handbook: 07-domain-knowledge-handbook.md
+      - Regulatory index: 09-regulatory-index.md
+  - Operations:
+      - Field operations: 04-field-operations.md
+      - Flight-training syllabus: 10-flight-training-syllabus.md
+      - Operational compliance: 12-operational-compliance.md
+  - Project:
+      - Study CLI: 08-study-cli.md
+      - GitHub Pages: 13-github-pages.md
+      - Engineering standards: development-standards.md
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+strict: true

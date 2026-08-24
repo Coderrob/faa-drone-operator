@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": ["astro.config.ts", "tools/**/*.ts"],
+  "exclude": ["coverage", "dist", "dist-cli", "node_modules", "site-dist"]
+}

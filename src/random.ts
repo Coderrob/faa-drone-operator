@@ -1,4 +1,8 @@
-// xmur3 + mulberry32 provide reproducible selection; this is not cryptographic.
+/**
+ * Creates a deterministic 32-bit seed factory using xmur3.
+ * @param value - Text used to initialize the hash.
+ * @returns A function that returns the next unsigned seed.
+ */
 function xmur3(value: string): () => number {
   let hash = 1779033703 ^ value.length;
   for (let index = 0; index < value.length; index += 1) {
@@ -12,6 +16,11 @@ function xmur3(value: string): () => number {
   };
 }
 
+/**
+ * Creates a reproducible pseudo-random number generator.
+ * @param seed - Stable text used to initialize the generator.
+ * @returns A function producing values in the range [0, 1).
+ */
 export function seededRandom(seed: string): () => number {
   const seedFactory = xmur3(seed);
   let state = seedFactory();
@@ -24,6 +33,12 @@ export function seededRandom(seed: string): () => number {
   };
 }
 
+/**
+ * Returns a Fisher-Yates shuffled copy of the supplied values.
+ * @param values - Values to copy and shuffle.
+ * @param random - Random number source producing values in [0, 1).
+ * @returns A shuffled copy without modifying the input.
+ */
 export function shuffled<T>(values: readonly T[], random: () => number): T[] {
   const result = [...values];
   for (let index = result.length - 1; index > 0; index -= 1) {

@@ -21,8 +21,17 @@ describe("quiz engine", () => {
     expect(parseAnswer("4")).toBe(3);
     expect(parseAnswer("skip")).toBeNull();
   });
+});
 
+describe("quiz engine validation", () => {
   it("rejects requests larger than the matching pool", () => {
     expect(() => selectQuestions(loadQuestions(), 1000, "fixed")).toThrow(/only/);
+    expect(() => selectQuestions(loadQuestions(), 0, "fixed")).toThrow(/positive/);
+  });
+
+  it("returns null for out-of-range and malformed answers", () => {
+    expect(parseAnswer("E")).toBeNull();
+    expect(parseAnswer("words")).toBeNull();
+    expect(parseAnswer("1", 0)).toBeNull();
   });
 });

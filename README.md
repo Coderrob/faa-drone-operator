@@ -91,12 +91,15 @@ npm run dev:cli -- --help
 
 See the [CLI guide](docs/08-study-cli.md) for every command and the
 [GitHub Pages guide](docs/13-github-pages.md) for deployment and base-path
-configuration.
+configuration. Contributor documentation is also organized through the root
+[`mkdocs.yml`](mkdocs.yml); see the [engineering standards](docs/development-standards.md).
 
 ## Validate changes
 
 ```powershell
 npm run check
+npm run quality
+npm run test:coverage
 npm run test:e2e
 ```
 

@@ -8,6 +8,12 @@ program
   .description("Original ACS-mapped FAA Part 107 study CLI")
   .version("0.1.0");
 
+/**
+ * Adds shared study and exam flags to a Commander command.
+ * @param command - Command to configure.
+ * @param defaultCount - Default number of questions.
+ * @returns The configured command.
+ */
 function addStudyOptions(command: Command, defaultCount: number): Command {
   return command
     .addOption(new Option("-n, --count <number>", "number of questions").default(defaultCount).argParser(Number))

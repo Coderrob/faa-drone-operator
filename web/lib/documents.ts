@@ -43,25 +43,64 @@ const entries: DocumentEntry[] = [
 const root = process.cwd();
 const absoluteByFile = new Map(entries.map((entry) => [path.resolve(root, entry.file), entry]));
 
+/**
+ * Returns document metadata in navigation order.
+ * @returns A fresh, ordered document list.
+ */
 export function getDocuments(): DocumentEntry[] {
   return [...entries].sort((a, b) => a.order - b.order);
 }
 
+/**
+ * Finds document metadata by route slug.
+ * @param slug - Route-safe document identifier.
+ * @returns Matching metadata, when present.
+ */
 export function getDocument(slug: string): DocumentEntry | undefined {
   return entries.find((entry) => entry.slug === slug);
 }
 
-function rewriteLinks(markdown: string, sourceFile: string): string {
-  return markdown.replace(/\]\((?!https?:|mailto:|#)([^)\s]+)(#[^)]+)?\)/g, (full, target: string, hash = "") => {
-    const resolved = path.resolve(path.dirname(path.resolve(root, sourceFile)), decodeURIComponent(target));
-    const document = absoluteByFile.get(resolved);
-    if (document) return `](${sitePath(`/learn/${document.slug}/${hash}`)})`;
-    const relative = path.relative(root, resolved).replaceAll("\\", "/");
-    if (!relative.startsWith("..")) return `](${repositoryUrl}/blob/main/${relative}${hash})`;
-    return full;
-  });
+/**
+ * Rewrites local Markdown links for the website or repository.
+ * @param markdown - Markdown source to transform.
+ * @param sourceFile - Repository-relative path of the source document.
+ * @returns Markdown with deploy-safe links.
+ */
+export function rewriteLinks(markdown: string, sourceFile: string): string {
+  /**
+   * Rewrites one regular-expression match.
+   * @param full - Original fragment.
+   * @param target - Target path.
+   * @param hash - URL fragment.
+   * @returns Rewritten fragment.
+   */
+  const replace = (full: string, target: string, hash = ""): string => rewriteLink(full, target, hash, sourceFile);
+  return markdown.replace(/\]\((?!https?:|mailto:|#)([^)\s#]+)(#[^)]+)?\)/g, replace);
 }
 
+/**
+ * Resolves one local Markdown link.
+ * @param original - Original Markdown link fragment.
+ * @param target - Link target path.
+ * @param hash - Optional target fragment.
+ * @param sourceFile - Repository-relative source document.
+ * @returns A website, repository, or unchanged link fragment.
+ */
+function rewriteLink(original: string, target: string, hash: string, sourceFile: string): string {
+  const resolved = path.resolve(path.dirname(path.resolve(root, sourceFile)), decodeURIComponent(target));
+  const document = absoluteByFile.get(resolved);
+  if (document) return `](${sitePath(`/learn/${document.slug}/${hash}`)})`;
+  const relative = path.relative(root, resolved).replaceAll("\\", "/");
+  if (relative.startsWith("..")) return original;
+  return `](${repositoryUrl}/blob/main/${relative}${hash})`;
+}
+
+/**
+ * Loads and renders a repository document as HTML.
+ * @param entry - Document metadata identifying the source file.
+ * @returns Rendered document HTML.
+ * @throws When the document file cannot be read or parsed.
+ */
 export function renderDocument(entry: DocumentEntry): string {
   const markdown = fs.readFileSync(path.resolve(root, entry.file), "utf8");
   const withoutFirstHeading = markdown.replace(/^#\s+[^\r\n]+\r?\n+/, "");

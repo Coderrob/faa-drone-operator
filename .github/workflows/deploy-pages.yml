@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Validate CLI and canonical data
-        run: npm run check:cli
+        run: npm run quality && npm run check:cli
 
       - name: Validate curriculum and mock exams
         shell: pwsh
