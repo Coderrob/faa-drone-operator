@@ -1,8 +1,8 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
-const site = process.env.SITE_URL ?? "https://coderrob.github.io";
-const base = process.env.BASE_PATH ?? "/faa-drone-operator";
+const site = process.env.SITE_URL ?? "https://faadroneoperator.com";
+const base = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
   site,

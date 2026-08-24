@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-test("home and learning library preserve the GitHub Pages base path", async ({ page }) => {
+test("home and learning library navigate from the custom-domain root", async ({ page }) => {
   await page.goto("./");
   await expect(page).toHaveTitle("Part 107 Flight Desk");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Learn the rules");
   await page.getByRole("link", { name: "Start the roadmap" }).click();
-  await expect(page).toHaveURL(/\/faa-drone-operator\/learn\/certification-roadmap\/$/);
+  await expect(page).toHaveURL(/\/learn\/certification-roadmap\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Certification roadmap");
   await expect(page.locator(".prose-faa h2").first()).toBeVisible();
 });

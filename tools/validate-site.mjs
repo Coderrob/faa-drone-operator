@@ -3,7 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const output = path.join(root, "site-dist");
-const base = "/faa-drone-operator";
+const base = "";
 const errors = [];
 
 function walk(directory) {
@@ -55,7 +55,7 @@ for (const capability of ["localStorage", "part107:web", "expiresAt", ":choices"
 }
 
 const workflow = fs.readFileSync(path.join(root, ".github", "workflows", "deploy-pages.yml"), "utf8");
-for (const marker of ["withastro/action@v6", "actions/deploy-pages@v5", "BASE_PATH", "npm run check:cli"]) {
+for (const marker of ["actions/upload-pages-artifact@v4", "actions/deploy-pages@v5", "BASE_PATH", "npm run check:cli"]) {
   if (!workflow.includes(marker)) errors.push(`Pages workflow lacks ${marker}.`);
 }
 

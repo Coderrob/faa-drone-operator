@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=20"
   },
-  "homepage": "https://coderrob.github.io/faa-drone-operator/",
+  "homepage": "https://faadroneoperator.com/",
   "keywords": [
     "faa",
     "part-107",

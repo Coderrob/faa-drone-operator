@@ -4,13 +4,13 @@ import path from "node:path";
 
 const host = process.env.HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 4321);
-const base = "/faa-drone-operator";
+const base = "";
 const output = path.resolve("site-dist");
 const mime = { ".css": "text/css", ".html": "text/html", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
 
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url ?? "/", `http://${host}`).pathname);
-  if (pathname === "/") { response.writeHead(302, { Location: `${base}/` }); response.end(); return; }
+  if (base && pathname === "/") { response.writeHead(302, { Location: `${base}/` }); response.end(); return; }
   if (!pathname.startsWith(`${base}/`)) { response.writeHead(404); response.end("Not found"); return; }
   const relative = pathname.slice(base.length).replace(/^\//, "");
   const candidate = path.resolve(output, relative || "index.html");

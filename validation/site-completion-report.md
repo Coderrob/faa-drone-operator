@@ -26,7 +26,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\Test-Content.ps
 ```
 
 The production validator checks route and asset existence under
-`/faa-drone-operator/`, canonical quiz/form payloads, browser persistence and
+the custom-domain root `/`, canonical quiz/form payloads, browser persistence and
 timer markers, and required workflow actions. Playwright exercises desktop and
 mobile navigation, study feedback/resume, and full mock-exam submission/results.
 

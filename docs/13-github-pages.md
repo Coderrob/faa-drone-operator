@@ -19,8 +19,8 @@ npm ci
 npm run dev
 ```
 
-Astro serves the site under `/faa-drone-operator/` to reproduce the GitHub Pages
-project path. Use the URL printed by Astro and append that base path if needed.
+Astro serves the site at `/`, matching the custom-domain deployment. Use the URL
+printed by Astro without appending a repository-name path.
 
 Run a production build and preview:
 
@@ -47,12 +47,13 @@ In the GitHub repository:
 
 1. Open **Settings → Pages**.
 2. Set **Source** to **GitHub Actions**.
-3. Push or merge to `main`, or run the workflow manually.
-4. Visit `https://coderrob.github.io/faa-drone-operator/` after deployment.
+3. Set **Custom domain** to `faadroneoperator.com` and enable **Enforce HTTPS**.
+4. Push or merge to `main`, or run the workflow manually.
+5. Visit `https://faadroneoperator.com/` after deployment.
 
-The workflow derives the owner and repository name from GitHub, setting Astro's
-`site` and `base` values for the deployed project. All internal site links and
-bundled assets use Astro's base path.
+The workflow sets Astro's `site` to the custom domain and its `base` to `/`.
+The `public/CNAME` file preserves the domain declaration in the static artifact;
+all internal links and bundled assets are generated from the domain root.
 
 ## Site architecture
 

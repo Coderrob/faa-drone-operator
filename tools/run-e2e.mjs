@@ -10,7 +10,7 @@ const server = spawn(process.execPath, [path.resolve("tools/serve-site.mjs")], {
 async function waitForServer(attempts = 60) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     const ready = await new Promise((resolve) => {
-      const request = http.get("http://127.0.0.1:4321/faa-drone-operator/", (response) => { response.resume(); resolve(response.statusCode === 200); });
+      const request = http.get("http://127.0.0.1:4321/", (response) => { response.resume(); resolve(response.statusCode === 200); });
       request.on("error", () => resolve(false));
       request.setTimeout(500, () => { request.destroy(); resolve(false); });
     });

@@ -49,8 +49,8 @@ jobs:
       - name: Test production website interactions
         run: npm run build && npm run test:e2e
         env:
-          SITE_URL: https://${{ github.repository_owner }}.github.io
-          BASE_PATH: /${{ github.event.repository.name }}
+          SITE_URL: https://faadroneoperator.com
+          BASE_PATH: /
 
       - name: Upload verified Pages artifact
         uses: actions/upload-pages-artifact@v4
