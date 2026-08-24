@@ -38,6 +38,9 @@ const entries: DocumentEntry[] = [
   { slug: "sop-construction", title: "Construction & real-estate SOP", eyebrow: "SOP", summary: "People, vehicles, active worksite, and property coordination controls.", file: "sops/construction-real-estate.md", order: 21 },
   { slug: "sop-agriculture", title: "Agriculture SOP", eyebrow: "SOP", summary: "Low-level rural-flight, equipment, worker, and adjacent-property controls.", file: "sops/agriculture.md", order: 22 },
   { slug: "sop-public-safety", title: "Public-safety SOP", eyebrow: "SOP", summary: "Incident-command, emergency-airspace, evidence, and responder coordination.", file: "sops/public-safety.md", order: 23 },
+  { slug: "mission-record", title: "Mission record", eyebrow: "Template", summary: "Document planning, approvals, crew, weather, risk, flight activity, and postflight evidence.", file: "templates/mission-record.md", order: 24 },
+  { slug: "pilot-aircraft-record", title: "Pilot & aircraft record", eyebrow: "Template", summary: "Maintain certificate, registration, Remote ID, category, and aircraft configuration evidence.", file: "templates/pilot-aircraft-record.md", order: 25 },
+  { slug: "incident-record", title: "Incident record", eyebrow: "Template", summary: "Preserve facts and route FAA, NTSB, client, insurer, or other reporting decisions.", file: "templates/incident-record.md", order: 26 },
 ];
 
 const root = process.cwd();

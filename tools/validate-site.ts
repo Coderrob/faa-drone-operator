@@ -91,6 +91,18 @@ function validateQuizPayloads(): void {
 }
 
 /**
+ * Validate rendered resource templates and their resource-page routes.
+ * @returns Nothing.
+ */
+function validateResourcePages(): void {
+  const resources = fs.readFileSync(path.join(output, "resources", "index.html"), "utf8");
+  const mission = fs.readFileSync(path.join(output, "learn", "mission-record", "index.html"), "utf8");
+  requireMarker(resources, 'href="/learn/mission-record/"', "Mission record does not use its rendered route.");
+  requireMarker(resources, 'href="/learn/incident-record/"', "Incident record does not use its rendered route.");
+  requireMarker(mission, "Authorization and planning", "Rendered mission record lacks template content.");
+}
+
+/**
  * Validate expected capabilities in generated JavaScript.
  * @param files - All generated file paths.
  * @returns Nothing.
@@ -142,7 +154,7 @@ function outputExists(): boolean {
  * @returns Nothing.
  */
 function validatePageCount(count: number): void {
-  if (count < 31) errors.push(`Expected at least 31 HTML pages; found ${count}.`);
+  if (count < 34) errors.push(`Expected at least 34 HTML pages; found ${count}.`);
 }
 
 /**
@@ -156,6 +168,7 @@ function main(): void {
   validatePageCount(htmlFiles.length);
   htmlFiles.forEach(validateLinks);
   validateQuizPayloads();
+  validateResourcePages();
   validateScripts(files);
   validateWorkflow();
   if (reportErrors()) return;

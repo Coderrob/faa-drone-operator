@@ -18,6 +18,7 @@ describe("getDocuments, getDocument, renderDocument, and rewriteLinks", () => {
     const html = renderDocument(entry);
     expect(html).not.toContain("<h1>Certification Roadmap");
     expect(html).toContain("<h2");
+    expect(renderDocument(getDocument("mission-record")!)).toContain("<pre><code");
   });
 
   it("should rewrite document and repository-relative links", () => {
