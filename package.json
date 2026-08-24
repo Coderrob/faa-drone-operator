@@ -1,30 +1,6 @@
 {
-  "name": "faa-part-107-study-cli",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Original ACS-mapped FAA Part 107 study and compliance CLI",
-  "type": "module",
   "bin": {
     "part107": "dist-cli/src/cli.js"
-  },
-  "scripts": {
-    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "dev:cli": "tsx src/cli.ts",
-    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
-    "build:cli": "tsc -p tsconfig.json",
-    "build:all": "npm run build:cli && npm run build",
-    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "check:astro": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:e2e": "node tools/run-e2e.mjs",
-    "validate:content": "node dist-cli/src/cli.js validate",
-    "validate:site": "node tools/validate-site.mjs",
-    "check:cli": "npm run build:cli && npm test && npm run validate:content",
-    "check": "npm run check:cli && npm run check:astro && npm run build && npm run validate:site"
-  },
-  "engines": {
-    "node": ">=20"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -33,6 +9,7 @@
     "marked": "^18.0.10",
     "tailwindcss": "^4.3.3"
   },
+  "description": "FAA Part 107 certification guide, ACS-mapped study app, mock exams, CLI, and compliance toolkit",
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.62.1",
@@ -41,5 +18,45 @@
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
     "vitest": "^3.2.0"
-  }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://coderrob.github.io/faa-drone-operator/",
+  "keywords": [
+    "faa",
+    "part-107",
+    "drone",
+    "remote-pilot",
+    "uas",
+    "suas",
+    "aviation",
+    "study-guide",
+    "mock-exam",
+    "astro"
+  ],
+  "name": "faa-part-107-study-cli",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coderrob/faa-drone-operator.git"
+  },
+  "scripts": {
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:all": "npm run build:cli && npm run build",
+    "build:cli": "tsc -p tsconfig.json",
+    "check": "npm run check:cli && npm run check:astro && npm run build && npm run validate:site",
+    "check:astro": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check:cli": "npm run build:cli && npm test && npm run validate:content",
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "dev:cli": "tsx src/cli.ts",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "test": "vitest run",
+    "test:e2e": "node tools/run-e2e.mjs",
+    "test:watch": "vitest",
+    "validate:content": "node dist-cli/src/cli.js validate",
+    "validate:site": "node tools/validate-site.mjs"
+  },
+  "type": "module",
+  "version": "0.1.0"
 }
