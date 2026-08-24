@@ -31,7 +31,9 @@ const links = [
     </nav>
     <div class="flex items-center gap-2">
       <a href={repositoryUrl} class="hidden rounded p-2 text-slate-600 hover:bg-blue-50 hover:text-sky-700 sm:block" aria-label="View source on GitHub"><Icon name="github" /></a>
-      <button id="menu-toggle" class="usa-button m-0 rounded bg-sky-500 p-2 text-white lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><Icon name="menu" /></button>
+      <span class="lg:hidden">
+        <button id="menu-toggle" class="usa-button m-0 rounded bg-sky-500 p-2 text-white" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><Icon name="menu" /></button>
+      </span>
     </div>
   </div>
   <nav id="mobile-nav" class="container-shell hidden border-t border-slate-200 py-3 lg:hidden" aria-label="Mobile navigation">
