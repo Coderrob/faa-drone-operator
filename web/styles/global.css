@@ -1,16 +1,17 @@
+@import "@uswds/uswds/css/uswds.min.css";
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
-  --font-display: "Aptos Display", "Inter", "Segoe UI", system-ui, sans-serif;
-  --color-ink-950: #07111f;
-  --color-ink-900: #0b1b2b;
-  --color-ink-800: #153047;
-  --color-sky-500: #1d8fc7;
-  --color-sky-400: #49b4e5;
-  --color-amber-500: #e7a52a;
-  --color-paper: #f6f8fa;
-  --shadow-panel: 0 18px 60px rgba(7, 17, 31, 0.12);
+  --font-sans: "Source Sans Pro Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Public Sans Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-ink-950: #162e51;
+  --color-ink-900: #1a4480;
+  --color-ink-800: #205493;
+  --color-sky-500: #005ea8;
+  --color-sky-400: #73b3e7;
+  --color-amber-500: #ffbe2e;
+  --color-paper: #f7f9fa;
+  --shadow-panel: 0 0.25rem 0.5rem rgba(27, 27, 27, 0.12);
 }
 
 @layer base {
@@ -22,36 +23,73 @@
   }
   body {
     @apply m-0 bg-paper font-sans text-slate-800 antialiased;
+    color: #1b1b1b;
   }
   ::selection {
     @apply bg-sky-400/30 text-ink-950;
   }
   :focus-visible {
-    @apply outline-3 outline-offset-3 outline-sky-500;
+    outline: 0.25rem solid #face00;
+    outline-offset: 0.25rem;
+  }
+  a {
+    text-underline-offset: 0.2em;
   }
 }
 
 @layer components {
   .container-shell {
-    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10;
   }
   .eyebrow {
-    @apply text-xs font-bold tracking-[0.18em] text-sky-700 uppercase;
+    @apply text-xs font-bold tracking-[0.08em] text-sky-700 uppercase;
   }
   .panel {
-    @apply rounded-2xl border border-slate-200 bg-white shadow-panel;
+    @apply rounded border border-slate-300 bg-white shadow-panel;
   }
   .button-primary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-lg bg-ink-900 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-11 items-center justify-center rounded px-5 py-2.5 text-base font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50;
+    background: #005ea8;
+    box-shadow: 0 2px 0 #162e51;
+  }
+  .button-primary:hover {
+    background: #1a4480;
   }
   .button-secondary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-ink-900 transition hover:border-sky-500 hover:text-sky-700 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-11 items-center justify-center rounded border-2 bg-white px-5 py-2.5 text-base font-bold transition disabled:cursor-not-allowed disabled:opacity-50;
+    border-color: #005ea8;
+    color: #005ea8;
+  }
+  .button-secondary:hover {
+    background: #e7f6f8;
+    border-color: #1a4480;
+    color: #1a4480;
+  }
+  .uswds-accent-rule {
+    height: 0.5rem;
+    background: linear-gradient(90deg, #005ea8 0 72%, #d83933 72% 86%, #ffbe2e 86%);
+  }
+  .uswds-disclosure {
+    @apply border-b border-blue-200 bg-blue-50 text-sm text-slate-800;
+  }
+  .uswds-identifier {
+    background: #162e51;
+    color: white;
+  }
+  .uswds-input {
+    @apply mt-2 min-h-11 w-full rounded-none border-2 border-slate-500 bg-white px-3;
+  }
+  .uswds-input:focus {
+    border-color: #005ea8;
+    outline: 0.25rem solid #face00;
+    outline-offset: 0;
   }
   .prose-faa {
     @apply max-w-none text-[1.02rem] leading-7 text-slate-700;
   }
   .prose-faa h2 {
-    @apply mt-12 scroll-mt-28 border-b border-slate-200 pb-3 font-display text-2xl font-bold tracking-tight text-ink-950;
+    @apply mt-12 scroll-mt-28 border-b-4 pb-3 font-display text-2xl font-bold tracking-tight text-ink-950;
+    border-color: #73b3e7;
   }
   .prose-faa h3 {
     @apply mt-9 scroll-mt-28 font-display text-xl font-bold text-ink-900;
@@ -72,7 +110,7 @@
     @apply my-5 list-decimal space-y-2 pl-6;
   }
   .prose-faa blockquote {
-    @apply my-6 border-l-4 border-amber-500 bg-amber-50 px-5 py-3 text-slate-700;
+    @apply my-6 border-l-8 border-amber-500 bg-amber-50 px-5 py-3 text-slate-700;
   }
   .prose-faa code {
     @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-sm text-ink-900;
@@ -87,7 +125,7 @@
     @apply my-7 block w-full overflow-x-auto border-collapse text-sm;
   }
   .prose-faa th {
-    @apply border border-slate-300 bg-slate-100 px-3 py-2 text-left font-bold text-ink-900;
+    @apply border border-slate-400 bg-slate-100 px-3 py-2 text-left font-bold text-ink-950;
   }
   .prose-faa td {
     @apply border border-slate-200 px-3 py-2 align-top;

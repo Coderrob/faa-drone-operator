@@ -102,6 +102,17 @@ function validateResourcePages(): void {
 }
 
 /**
+ * Validate the USWDS theme marker and independent-site disclosure.
+ * @returns Nothing.
+ */
+function validateTheme(): void {
+  const home = fs.readFileSync(path.join(output, "index.html"), "utf8");
+  requireMarker(home, 'data-design-system="uswds"', "Home page lacks the USWDS theme marker.");
+  requireMarker(home, "Not an official FAA or U.S. government website.", "Home page lacks the independent-site disclosure.");
+  requireMarker(home, "Part 107 Flight Desk", "USWDS identifier lacks the site identity.");
+}
+
+/**
  * Validate expected capabilities in generated JavaScript.
  * @param files - All generated file paths.
  * @returns Nothing.
@@ -170,6 +181,7 @@ function main(): void {
   htmlFiles.forEach(validateLinks);
   validateQuizPayloads();
   validateResourcePages();
+  validateTheme();
   validateScripts(files);
   validateWorkflow();
   if (reportErrors()) return;

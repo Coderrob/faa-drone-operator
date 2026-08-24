@@ -18,7 +18,7 @@ const { mode } = Astro.props;
     {
       mode === "exam" ? (
         <FormField label="Mock-exam form" for="form">
-          <select id="form" name="form" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3">
+          <select id="form" name="form" class="usa-select uswds-input">
             <>
               <option value="A">Form A</option>
               <option value="B">Form B</option>
@@ -28,7 +28,7 @@ const { mode } = Astro.props;
       ) : (
         <>
           <FormField label="ACS Area" for="area">
-            <select id="area" name="area" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3">
+            <select id="area" name="area" class="usa-select uswds-input">
               <>
                 <option value="">All Areas</option>
                 <option value="I">I — Regulations</option>
@@ -40,7 +40,7 @@ const { mode } = Astro.props;
             </select>
           </FormField>
           <FormField label="Question count" for="count">
-            <select id="count" name="count" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3">
+            <select id="count" name="count" class="usa-select uswds-input">
               <>
                 <option>5</option>
                 <option selected>10</option>
@@ -51,13 +51,13 @@ const { mode } = Astro.props;
             </select>
           </FormField>
           <FormField label="Topic contains" for="topic" hint="Optional. Searches the canonical topic name.">
-            <input id="topic" name="topic" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 px-3" placeholder="e.g. weather or Remote ID" />
+            <input id="topic" name="topic" class="usa-input uswds-input" placeholder="e.g. weather or Remote ID" />
           </FormField>
         </>
       )
     }
     <FormField label="Session seed" for="seed" hint="The same seed reproduces question and answer order."
-      ><input id="seed" name="seed" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 px-3" value={mode === "exam" ? "mock-exam" : "study-session"} required /></FormField
+      ><input id="seed" name="seed" class="usa-input uswds-input" value={mode === "exam" ? "mock-exam" : "study-session"} required /></FormField
     >
     <div class="sm:col-span-2 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-6">
       <button class="button-primary" type="submit">{mode === "exam" ? "Begin 120-minute exam" : "Start study session"}</button><p data-setup-error class="text-sm font-semibold text-red-700" role="alert"></p>

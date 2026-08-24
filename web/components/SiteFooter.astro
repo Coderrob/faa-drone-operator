@@ -2,7 +2,7 @@
 import { repositoryUrl, sitePath } from "../lib/paths";
 ---
 
-<footer class="mt-20 border-t border-slate-200 bg-white">
+<footer class="mt-20 border-t-4 border-sky-500 bg-slate-100">
   <div class="container-shell grid gap-8 py-10 md:grid-cols-[1fr_auto] md:items-end">
     <div class="max-w-2xl">
       <p class="font-display text-lg font-bold text-ink-950">Part 107 Flight Desk</p>
@@ -12,6 +12,12 @@ import { repositoryUrl, sitePath } from "../lib/paths";
       <a class="hover:text-sky-700" href={sitePath("/learn/faa-source-content/")}>Sources</a>
       <a class="hover:text-sky-700" href={repositoryUrl}>GitHub</a>
       <a class="hover:text-sky-700" href="https://www.faa.gov/uas">FAA UAS</a>
+    </div>
+  </div>
+  <div class="uswds-identifier">
+    <div class="container-shell grid gap-5 py-6 text-sm sm:grid-cols-[1fr_auto] sm:items-center">
+      <p><strong>Part 107 Flight Desk</strong><br /><span class="text-blue-100">Open-source, independently maintained educational material.</span></p>
+      <p class="max-w-xl text-blue-100">Not affiliated with or endorsed by the Federal Aviation Administration. FAA rules and official sources control.</p>
     </div>
   </div>
 </footer>
