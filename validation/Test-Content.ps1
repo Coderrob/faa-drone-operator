@@ -3,6 +3,9 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $requiredFiles = @(
     'README.md',
+    'mkdocs.yml',
+    'docs/index.md',
+    'docs/development-standards.md',
     'docs/00-faa-source-content.md',
     'docs/01-certification-roadmap.md',
     'docs/02-acs-study-guide.md',
@@ -31,6 +34,7 @@ $requiredFiles = @(
     'validation/site-completion-report.md',
     'package.json',
     'tsconfig.json',
+    'tsconfig.tools.json',
     'data/questions.json',
     'data/acs-elements.csv',
     'data/card-questions.json',
@@ -45,12 +49,20 @@ $requiredFiles = @(
     'src/quiz.ts',
     'src/random.ts',
     'src/types.ts',
-    'test/questions.test.ts',
-    'test/quiz.test.ts',
-    'test/random.test.ts',
-    'test/mock-exams.test.ts',
-    'test/compliance.test.ts',
-    'test/history.test.ts',
+    'src/questions.test.ts',
+    'src/quiz.test.ts',
+    'src/random.test.ts',
+    'src/mock-exams.test.ts',
+    'src/compliance.test.ts',
+    'src/history.test.ts',
+    'src/commands.test.ts',
+    'src/study-command.test.ts',
+    'web/lib/documents.test.ts',
+    'web/lib/paths.test.ts',
+    'web/lib/quiz-controller.test.ts',
+    'web/lib/quiz-results.test.ts',
+    'web/lib/quiz-session.test.ts',
+    'web/lib/quiz-view.test.ts',
     'docs/08-study-cli.md',
     'docs/09-regulatory-index.md',
     'docs/10-flight-training-syllabus.md',
@@ -70,15 +82,15 @@ $requiredFiles = @(
     'tools/Update-AcsCardMappings.ps1',
     'tools/Build-QuestionBank.ps1'
     'tools/Build-MockExamDocs.ps1'
-    'astro.config.mjs'
+    'astro.config.ts'
     '.github/workflows/deploy-pages.yml'
     'web/pages/index.astro'
     'web/pages/study.astro'
     'web/pages/exam.astro'
     'web/scripts/quiz-app.ts'
-    'tools/validate-site.mjs'
-    'tools/serve-site.mjs'
-    'tools/run-e2e.mjs'
+    'tools/validate-site.ts'
+    'tools/serve-site.ts'
+    'tools/run-e2e.ts'
     'playwright.config.ts'
     'vitest.config.ts'
     'e2e/navigation.spec.ts'
@@ -99,6 +111,59 @@ foreach ($relativePath in $requiredFiles) {
     if (-not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
         $failures.Add("Missing required artifact: $relativePath")
     }
+}
+
+$legacyModules = Get-ChildItem -LiteralPath $projectRoot -Recurse -File -Filter '*.mjs' |
+    Where-Object { $_.FullName -notmatch '[\\/](node_modules|dist|site-dist)[\\/]' }
+foreach ($legacyModule in $legacyModules) {
+    $relativeModule = [System.IO.Path]::GetRelativePath($projectRoot, $legacyModule.FullName)
+    $failures.Add("Legacy .mjs source is not permitted: $relativeModule")
+}
+
+$sourceFiles = Get-ChildItem -LiteralPath $projectRoot -Recurse -File |
+    Where-Object {
+        $_.Extension -in @('.ts', '.astro', '.js') -and
+        $_.FullName -notmatch '[\\/](node_modules|coverage|dist|dist-cli|site-dist)[\\/]'
+    }
+foreach ($sourceFile in $sourceFiles) {
+    $lineCount = @(Get-Content -LiteralPath $sourceFile.FullName).Count
+    if ($lineCount -gt 350) {
+        $relativeSource = [System.IO.Path]::GetRelativePath($projectRoot, $sourceFile.FullName)
+        $failures.Add("Source file exceeds 350 physical lines: $relativeSource ($lineCount)")
+    }
+}
+
+$coveredModules = @(
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'src') -File -Filter '*.ts' |
+        Where-Object { $_.Name -notlike '*.test.ts' -and $_.Name -notin @('cli.ts', 'types.ts') }
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'web/lib') -File -Filter '*.ts' |
+        Where-Object { $_.Name -notlike '*.test.ts' }
+)
+foreach ($module in $coveredModules) {
+    $testPath = [System.IO.Path]::ChangeExtension($module.FullName, '.test.ts')
+    if (-not (Test-Path -LiteralPath $testPath -PathType Leaf)) {
+        $relativeModule = [System.IO.Path]::GetRelativePath($projectRoot, $module.FullName)
+        $failures.Add("Covered module lacks an adjacent 1:1 test: $relativeModule")
+    }
+}
+
+$colocatedTests = @(
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'src') -File -Filter '*.test.ts'
+    Get-ChildItem -LiteralPath (Join-Path $projectRoot 'web/lib') -File -Filter '*.test.ts'
+)
+foreach ($testFile in $colocatedTests) {
+    $moduleName = $testFile.Name -replace '\.test\.ts$', '.ts'
+    $modulePath = Join-Path $testFile.DirectoryName $moduleName
+    if (-not (Test-Path -LiteralPath $modulePath -PathType Leaf)) {
+        $relativeTest = [System.IO.Path]::GetRelativePath($projectRoot, $testFile.FullName)
+        $failures.Add("Colocated test lacks a 1:1 production module: $relativeTest")
+    }
+}
+
+$legacyUnitTests = Get-ChildItem -LiteralPath (Join-Path $projectRoot 'test') -Recurse -File -Filter '*.test.ts' -ErrorAction SilentlyContinue
+foreach ($legacyTest in $legacyUnitTests) {
+    $relativeTest = [System.IO.Path]::GetRelativePath($projectRoot, $legacyTest.FullName)
+    $failures.Add("Unit test is not colocated with its module: $relativeTest")
 }
 
 $markdownFiles = Get-ChildItem -LiteralPath $projectRoot -Recurse -File -Filter '*.md' |

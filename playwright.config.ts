@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:4321/faa-drone-operator/",
+    baseURL: "http://127.0.0.1:4321/",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },

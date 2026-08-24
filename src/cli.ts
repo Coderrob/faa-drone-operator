@@ -1,6 +1,16 @@
 #!/usr/bin/env node
 import { Command, Option } from "commander";
 import { runComplianceAudit, runStats, runStudy, runValidate } from "./commands.js";
+import type { StudyOptions } from "./study-command.js";
+
+interface StudyCliOptions extends StudyOptions { readonly save?: boolean }
+interface StatsCliOptions { readonly history: string; readonly today?: string }
+interface ValidateCliOptions { readonly release?: boolean }
+interface ComplianceCliOptions {
+  readonly calendar: string;
+  readonly today?: string;
+  readonly json?: boolean;
+}
 
 const program = new Command();
 program
@@ -8,6 +18,12 @@ program
   .description("Original ACS-mapped FAA Part 107 study CLI")
   .version("0.1.0");
 
+/**
+ * Adds shared study and exam flags to a Commander command.
+ * @param command - Command to configure.
+ * @param defaultCount - Default number of questions.
+ * @returns The configured command.
+ */
 function addStudyOptions(command: Command, defaultCount: number): Command {
   return command
     .addOption(new Option("-n, --count <number>", "number of questions").default(defaultCount).argParser(Number))
@@ -23,13 +39,13 @@ function addStudyOptions(command: Command, defaultCount: number): Command {
 }
 
 addStudyOptions(program.command("study").description("run a study session"), 10)
-  .action(async (options) => {
+  .action(async (options: StudyCliOptions) => {
     process.exitCode = await runStudy({ ...options, noSave: options.save === false, mode: "study" });
   });
 
 addStudyOptions(program.command("exam").description("run exam mode; explanations appear after scoring"), 60)
   .option("--form <A|B>", "use fixed original 60-question mock form A or B")
-  .action(async (options) => {
+  .action(async (options: StudyCliOptions) => {
     process.exitCode = await runStudy({ ...options, noSave: options.save === false, mode: "exam" });
   });
 
@@ -37,7 +53,7 @@ program.command("stats")
   .description("summarize saved attempts and remediation count")
   .option("--history <path>", "history JSON path", ".part107/history.json")
   .option("--today <YYYY-MM-DD>", "deterministic date for due count")
-  .action(async ({ history, today }) => {
+  .action(async ({ history, today }: StatsCliOptions) => {
     const date = today === undefined ? new Date() : new Date(`${today}T00:00:00Z`);
     if (Number.isNaN(date.getTime())) throw new Error("--today must be YYYY-MM-DD");
     process.exitCode = await runStats(history, date);
@@ -46,7 +62,7 @@ program.command("stats")
 program.command("validate")
   .description("validate the canonical question dataset")
   .option("--release", "also require generated distractors to be human-approved")
-  .action(({ release }) => {
+  .action(({ release }: ValidateCliOptions) => {
     process.exitCode = runValidate(release === true);
   });
 
@@ -55,7 +71,7 @@ program.command("compliance")
   .option("--calendar <path>", "compliance calendar CSV", "templates/compliance-calendar.csv")
   .option("--today <YYYY-MM-DD>", "deterministic audit date")
   .option("--json", "emit machine-readable findings")
-  .action(async ({ calendar, today, json }) => {
+  .action(async ({ calendar, today, json }: ComplianceCliOptions) => {
     process.exitCode = await runComplianceAudit(calendar, today, json === true);
   });
 

@@ -3,7 +3,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { getDocuments, renderDocument, type DocumentEntry } from "../../lib/documents";
 import { repositoryUrl } from "../../lib/paths";
-export function getStaticPaths() { return getDocuments().map((entry) => ({ params: { slug: entry.slug }, props: { entry } })); }
+/**
+ * Creates one static route for every curated learning document.
+ * @returns Astro route parameters and document props.
+ */
+export function getStaticPaths() {
+  return getDocuments().map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
 interface Props { entry: DocumentEntry; }
 const { entry } = Astro.props;
 const html = renderDocument(entry);

@@ -1,7 +1,7 @@
 # Part 107 Flight Desk
 
 [![Deploy Astro site to GitHub Pages](https://github.com/Coderrob/faa-drone-operator/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Coderrob/faa-drone-operator/actions/workflows/deploy-pages.yml)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-0ea5e9?logo=github)](https://coderrob.github.io/faa-drone-operator/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-0ea5e9?logo=github)](https://faadroneoperator.com/)
 [![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?logo=nodedotjs&logoColor=white)](package.json)
@@ -10,9 +10,9 @@ A source-grounded FAA Part 107 learning and operations workspace. It combines a
 step-by-step certification guide, ACS-mapped study material, interactive study
 cards, two full mock exams, a TypeScript CLI, and reusable compliance records.
 
-**[Open the learning site](https://coderrob.github.io/faa-drone-operator/)** ·
-**[Study cards](https://coderrob.github.io/faa-drone-operator/study/)** ·
-**[Take a mock exam](https://coderrob.github.io/faa-drone-operator/exam/)**
+**[Open the learning site](https://faadroneoperator.com/)** ·
+**[Study cards](https://faadroneoperator.com/study/)** ·
+**[Take a mock exam](https://faadroneoperator.com/exam/)**
 
 > [!IMPORTANT]
 > This project is an independent study aid, not an FAA publication or a
@@ -91,12 +91,15 @@ npm run dev:cli -- --help
 
 See the [CLI guide](docs/08-study-cli.md) for every command and the
 [GitHub Pages guide](docs/13-github-pages.md) for deployment and base-path
-configuration.
+configuration. Contributor documentation is also organized through the root
+[`mkdocs.yml`](mkdocs.yml); see the [engineering standards](docs/development-standards.md).
 
 ## Validate changes
 
 ```powershell
 npm run check
+npm run quality
+npm run test:coverage
 npm run test:e2e
 ```
 

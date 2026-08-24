@@ -22,7 +22,7 @@ $sectionByCard = @{
     'REG-29'='89.305'; 'REG-30'='89.115'; 'REG-31'='89.115'
 }
 
-function Get-Citations($card, $metadata) {
+function Get-Citation($card, $metadata) {
     $result = [System.Collections.Generic.List[object]]::new()
     $result.Add([ordered]@{label='FAA-S-ACS-10B';url='https://www.faa.gov/sites/faa.gov/files/training_testing/testing/acs/uas_acs.pdf';locator="$($card.code), page $($metadata.acs_page); $($metadata.primary_references)"})
     if ($sectionByCard.ContainsKey($card.id)) {
@@ -76,7 +76,7 @@ foreach ($card in $cards) {
         $choices = @($override.choices)
         $review = [string]$override.review.status
     }
-    $bank.Add([ordered]@{id=$questionId;sourceCardId=$card.id;acsCode=$card.code;area=$area;task=$task;topic=$m.requirement;difficulty=2;critical=$false;prompt=$card.prompt;choices=$choices;correctIndex=0;explanation="$($card.answer) This assesses $($m.requirement).";remediation="Review $($m.lesson) and $($m.exercise).";citations=@(Get-Citations $card $m);original=$true;distractorReview=$review})
+    $bank.Add([ordered]@{id=$questionId;sourceCardId=$card.id;acsCode=$card.code;area=$area;task=$task;topic=$m.requirement;difficulty=2;critical=$false;prompt=$card.prompt;choices=$choices;correctIndex=0;explanation="$($card.answer) This assesses $($m.requirement).";remediation="Review $($m.lesson) and $($m.exercise).";citations=@(Get-Citation $card $m);original=$true;distractorReview=$review})
 }
 $bank|ConvertTo-Json -Depth 8|Set-Content (Join-Path $root 'data/card-questions.json') -Encoding UTF8
 
