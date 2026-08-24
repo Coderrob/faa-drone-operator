@@ -1,0 +1,17 @@
+---
+interface Props { name: "book" | "check" | "chevron" | "clipboard" | "github" | "menu" | "plane" | "shield" | "target" | "x"; class?: string; }
+const { name, class: className = "size-5" } = Astro.props;
+const paths: Record<Props["name"], string> = {
+  book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Zm16 0A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  chevron: '<path d="m9 18 6-6-6-6"/>',
+  clipboard: '<path d="M9 5h6m-6 4h6m-6 4h4m-7 8h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-3.5a2.5 2.5 0 0 0-5 0H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"/>',
+  github: '<path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.69c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.58 9.58 0 0 1 12 6.7a9.6 9.6 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.77c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  plane: '<path d="m2 16 20-8-8 20-3-9-9-3Zm9 3 3-3"/>',
+  shield: '<path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>',
+  x: '<path d="m6 6 12 12M18 6 6 18"/>',
+};
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={paths[name]} />

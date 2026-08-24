@@ -1,0 +1,21 @@
+import { expect, test } from "@playwright/test";
+
+test("home and learning library preserve the GitHub Pages base path", async ({ page }) => {
+  await page.goto("./");
+  await expect(page).toHaveTitle("Part 107 Flight Desk");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Learn the rules");
+  await page.getByRole("link", { name: "Start the roadmap" }).click();
+  await expect(page).toHaveURL(/\/faa-drone-operator\/learn\/certification-roadmap\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Certification roadmap");
+  await expect(page.locator(".prose-faa h2").first()).toBeVisible();
+});
+
+test("mobile navigation opens and reaches the mock exam", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile-only navigation assertion");
+  await page.goto("./");
+  const toggle = page.getByRole("button", { name: "Open navigation" });
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await page.locator("#mobile-nav").getByRole("link", { name: "Mock exam" }).click();
+  await expect(page).toHaveURL(/\/exam\/$/);
+});

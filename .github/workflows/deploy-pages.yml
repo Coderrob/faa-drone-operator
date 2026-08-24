@@ -1,0 +1,74 @@
+name: Deploy Astro site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate CLI and canonical data
+        run: npm run check:cli
+
+      - name: Validate curriculum and mock exams
+        shell: pwsh
+        run: |
+          $env:PART107_RELEASE_VALIDATE = '1'
+          ./validation/Test-AcsCoverage.ps1
+          ./validation/Test-MockExams.ps1
+          ./validation/Test-Content.ps1
+
+      - name: Install browser for interaction tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Test production website interactions
+        run: npm run build && npm run test:e2e
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}
+
+      - name: Build and upload Astro site
+        uses: withastro/action@v6
+        with:
+          node-version: 24
+          build-cmd: npm run build
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

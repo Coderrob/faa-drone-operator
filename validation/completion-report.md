@@ -31,7 +31,7 @@ forms:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\Build-QuestionBank.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\Build-MockExamDocs.ps1
 npm run check
-npm run dev -- validate --release
+npm run dev:cli -- validate --release
 $env:PART107_RELEASE_VALIDATE = '1'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\Test-MockExams.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\Test-AcsCoverage.ps1
@@ -46,7 +46,8 @@ Observed results:
 - 156 total CLI questions validate across all five ACS Areas.
 - Six test files and 18 automated tests pass.
 - All 176 ACS inventory rows resolve complete lesson/card/exercise mappings.
-- 66 required artifacts and 34 Markdown files pass presence/link checks.
+- 89 required artifacts and 36 Markdown files pass presence/link checks after
+  adding the Astro website and deployment package.
 - Both live noninteractive `study` and 60-question fixed-form `exam` sessions ran;
   their exit code `2` correctly represented a below-70% supplied-answer score.
 - `stats` ran against an empty history, and `compliance` correctly returned exit

@@ -1,5 +1,10 @@
 node_modules/
 dist/
+dist-cli/
+site-dist/
+.astro/
+playwright-report/
+test-results/
 .part107/
 coverage/
 *.tsbuildinfo

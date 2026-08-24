@@ -1,0 +1,16 @@
+---
+import { repositoryUrl, sitePath } from "../lib/paths";
+---
+<footer class="mt-20 border-t border-slate-200 bg-white">
+  <div class="container-shell grid gap-8 py-10 md:grid-cols-[1fr_auto] md:items-end">
+    <div class="max-w-2xl">
+      <p class="font-display text-lg font-bold text-ink-950">Part 107 Flight Desk</p>
+      <p class="mt-2 text-sm leading-6 text-slate-600">Independent study material. Always verify current FAA rules, airspace, weather, authorizations, and aircraft instructions before operating.</p>
+    </div>
+    <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-slate-600">
+      <a class="hover:text-sky-700" href={sitePath("/learn/faa-source-content/")}>Sources</a>
+      <a class="hover:text-sky-700" href={repositoryUrl}>GitHub</a>
+      <a class="hover:text-sky-700" href="https://www.faa.gov/uas">FAA UAS</a>
+    </div>
+  </div>
+</footer>

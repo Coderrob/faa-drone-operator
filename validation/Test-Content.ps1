@@ -28,6 +28,7 @@ $requiredFiles = @(
     'validation/requirements-matrix.md',
     'validation/source-register.md',
     'validation/completion-report.md',
+    'validation/site-completion-report.md',
     'package.json',
     'tsconfig.json',
     'data/questions.json',
@@ -55,6 +56,7 @@ $requiredFiles = @(
     'docs/10-flight-training-syllabus.md',
     'docs/11-registration-scenarios.md',
     'docs/12-operational-compliance.md',
+    'docs/13-github-pages.md',
     'sops/README.md',
     'sops/photography-video.md',
     'sops/mapping-photogrammetry.md',
@@ -68,6 +70,27 @@ $requiredFiles = @(
     'tools/Update-AcsCardMappings.ps1',
     'tools/Build-QuestionBank.ps1'
     'tools/Build-MockExamDocs.ps1'
+    'astro.config.mjs'
+    '.github/workflows/deploy-pages.yml'
+    'web/pages/index.astro'
+    'web/pages/study.astro'
+    'web/pages/exam.astro'
+    'web/scripts/quiz-app.ts'
+    'tools/validate-site.mjs'
+    'tools/serve-site.mjs'
+    'tools/run-e2e.mjs'
+    'playwright.config.ts'
+    'vitest.config.ts'
+    'e2e/navigation.spec.ts'
+    'e2e/quiz.spec.ts'
+    'web/layouts/BaseLayout.astro'
+    'web/components/SiteHeader.astro'
+    'web/components/SiteFooter.astro'
+    'web/components/QuizApp.astro'
+    'web/components/QuizSetup.astro'
+    'web/components/QuizProgress.astro'
+    'web/components/RecentResults.astro'
+    'web/styles/global.css'
 )
 
 $failures = [System.Collections.Generic.List[string]]::new()

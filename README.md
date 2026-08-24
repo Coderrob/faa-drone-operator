@@ -1,5 +1,18 @@
 # FAA Part 107 Remote Pilot Study Kit
 
+The polished browser edition is built with Astro and Tailwind CSS and is configured to deploy to
+[GitHub Pages](https://coderrob.github.io/faa-drone-operator/). It includes the
+full learning library, study-card sessions, and both timed mock exams.
+
+```powershell
+npm ci
+npm run dev       # Astro website
+npm run dev:cli -- study --count 10  # Commander CLI
+```
+
+See the [GitHub Pages guide](docs/13-github-pages.md) for production builds,
+browser tests, deployment, base paths, architecture, and privacy behavior.
+
 This kit curates the path, knowledge, and working habits needed to earn an FAA
 Remote Pilot Certificate and begin operating a small uncrewed aircraft system
 (sUAS) safely under 14 CFR Part 107.
@@ -79,7 +92,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\Test-AcsCoverag
 $env:PART107_RELEASE_VALIDATE = '1'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\validation\Test-MockExams.ps1
 npm run check
-npm run dev -- validate --release
+npm run dev:cli -- validate --release
 ```
 
 The bypass is process-scoped and is useful where local script execution is

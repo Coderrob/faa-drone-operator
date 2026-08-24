@@ -20,38 +20,38 @@ run `npm run check` after installation to verify the local runtime.
 
 ```powershell
 # Interactive study; immediate explanations
-npm run dev -- study --count 10 --area II --seed airspace-1
+npm run dev:cli -- study --count 10 --area II --seed airspace-1
 
 # Topic filter
-npm run dev -- study --topic METAR --count 5
+npm run dev:cli -- study --topic METAR --count 5
 
 # Deterministic non-interactive session
-npm run dev -- study --count 4 --seed demo --answers A,C,S,B --no-save
+npm run dev:cli -- study --count 4 --seed demo --answers A,C,S,B --no-save
 
 # Exam mode with explanations held until the end
-npm run dev -- exam --count 60 --seed mock-a
+npm run dev:cli -- exam --count 60 --seed mock-a
 
-# Fixed 60-question form (draft until distractor review is complete)
-npm run dev -- exam --form A --seed attempt-1
+# Fixed, release-reviewed 60-question form
+npm run dev:cli -- exam --form A --seed attempt-1
 
 # Revisit questions most recently answered incorrectly
-npm run dev -- study --remediate --count 10
+npm run dev:cli -- study --remediate --count 10
 
 # Review questions due on the 1/3/7/14/30-day schedule
-npm run dev -- study --due --today 2026-08-23 --count 10
+npm run dev:cli -- study --due --today 2026-08-23 --count 10
 
 # Summarize history
-npm run dev -- stats
+npm run dev:cli -- stats
 
 # Validate the question dataset
-npm run dev -- validate
-npm run dev -- validate --release
+npm run dev:cli -- validate
+npm run dev:cli -- validate --release
 
 # Audit compliance ownership and due dates (exit 3 for overdue/missing)
-npm run dev -- compliance --today 2026-08-23
+npm run dev:cli -- compliance --today 2026-08-23
 
 # Machine-readable audit
-npm run dev -- compliance --calendar records/compliance.csv --json
+npm run dev:cli -- compliance --calendar records/compliance.csv --json
 ```
 
 The default history file is `.part107/history.json`. Override it with
@@ -69,8 +69,8 @@ question ID.
 
 The engine, commands, history/remediation logic, seedable randomization,
 compliance audit, 156-question dataset, fixed mock forms, validation, and tests
-are implemented. Mock-form distractors remain draft until human review recorded
-in the question data changes their review status to `approved`. Normal validation
-checks schema and integrity; `validate --release` additionally fails every
-unapproved generated question. The PowerShell mock validator provides the same
-gate when `PART107_RELEASE_VALIDATE=1`.
+are implemented. All generated distractors have question-specific reviewed
+overrides and an `approved` release state. Normal validation checks schema and
+integrity; `validate --release` additionally rejects any future unapproved
+generated question. The PowerShell mock validator provides the same gate when
+`PART107_RELEASE_VALIDATE=1`.

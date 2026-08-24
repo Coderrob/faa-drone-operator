@@ -1,0 +1,38 @@
+---
+import Icon from "./Icon.astro";
+import { repositoryUrl, sitePath } from "../lib/paths";
+const pathname = Astro.url.pathname;
+const links = [
+  { href: sitePath("/learn/"), label: "Learn" },
+  { href: sitePath("/study/"), label: "Study cards" },
+  { href: sitePath("/exam/"), label: "Mock exam" },
+  { href: sitePath("/resources/"), label: "Resources" },
+];
+---
+<header class="sticky top-0 z-50 border-b border-white/10 bg-ink-950 text-white shadow-lg shadow-slate-950/10">
+  <div class="container-shell flex h-18 items-center justify-between gap-4">
+    <a href={sitePath("/")} class="flex min-w-0 items-center gap-3 font-display font-bold tracking-tight">
+      <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-amber-500 text-ink-950"><Icon name="plane" /></span>
+      <span class="truncate"><span class="hidden sm:inline">Part 107 </span>Flight Desk</span>
+    </a>
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+      {links.map((link) => <a href={link.href} class:list={["rounded-md px-3 py-2 text-sm font-semibold transition hover:bg-white/10", pathname.startsWith(link.href) && "bg-white/12 text-sky-300"]}>{link.label}</a>)}
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href={repositoryUrl} class="hidden rounded-md p-2 text-slate-300 hover:bg-white/10 hover:text-white sm:block" aria-label="View source on GitHub"><Icon name="github" /></a>
+      <button id="menu-toggle" class="rounded-md p-2 hover:bg-white/10 lg:hidden" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation"><Icon name="menu" /></button>
+    </div>
+  </div>
+  <nav id="mobile-nav" class="container-shell hidden border-t border-white/10 py-3 lg:hidden" aria-label="Mobile navigation">
+    <div class="grid gap-1">{links.map((link) => <a href={link.href} class="rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-white/10">{link.label}</a>)}</div>
+  </nav>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("#menu-toggle");
+  const nav = document.querySelector<HTMLElement>("#mobile-nav");
+  toggle?.addEventListener("click", () => {
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!expanded));
+    nav?.classList.toggle("hidden", expanded);
+  });
+</script>

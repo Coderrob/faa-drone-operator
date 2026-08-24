@@ -1,0 +1,17 @@
+---
+import FormField from "./FormField.astro";
+interface Props { mode: "study" | "exam"; }
+const { mode } = Astro.props;
+---
+<section data-setup-panel class="panel p-6 sm:p-8" aria-labelledby="setup-title">
+  <div class="flex flex-wrap items-start justify-between gap-5"><div><p class="eyebrow">Session setup</p><h2 id="setup-title" class="mt-2 font-display text-2xl font-bold text-ink-950">{mode === "exam" ? "Choose a fixed exam form" : "Build a focused review"}</h2></div><button data-resume class="button-secondary hidden" type="button">Resume saved session</button></div>
+  <form data-setup-form class="mt-8 grid gap-5 sm:grid-cols-2" autocomplete="off">
+    {mode === "exam" ? <FormField label="Mock-exam form" for="form"><select id="form" name="form" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3"><option value="A">Form A</option><option value="B">Form B</option></select></FormField> : <>
+      <FormField label="ACS Area" for="area"><select id="area" name="area" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3"><option value="">All Areas</option><option value="I">I — Regulations</option><option value="II">II — Airspace</option><option value="III">III — Weather</option><option value="IV">IV — Loading & performance</option><option value="V">V — Operations</option></select></FormField>
+      <FormField label="Question count" for="count"><select id="count" name="count" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3"><option>5</option><option selected>10</option><option>20</option><option>30</option><option>60</option></select></FormField>
+      <FormField label="Topic contains" for="topic" hint="Optional. Searches the canonical topic name."><input id="topic" name="topic" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 px-3" placeholder="e.g. weather or Remote ID" /></FormField>
+    </>}
+    <FormField label="Session seed" for="seed" hint="The same seed reproduces question and answer order."><input id="seed" name="seed" class="mt-2 min-h-11 w-full rounded-lg border border-slate-300 px-3" value={mode === "exam" ? "mock-exam" : "study-session"} required /></FormField>
+    <div class="sm:col-span-2 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-6"><button class="button-primary" type="submit">{mode === "exam" ? "Begin 120-minute exam" : "Start study session"}</button><p data-setup-error class="text-sm font-semibold text-red-700" role="alert"></p></div>
+  </form>
+</section>

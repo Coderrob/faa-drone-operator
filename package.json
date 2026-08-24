@@ -5,24 +5,39 @@
   "description": "Original ACS-mapped FAA Part 107 study and compliance CLI",
   "type": "module",
   "bin": {
-    "part107": "dist/src/cli.js"
+    "part107": "dist-cli/src/cli.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsx src/cli.ts",
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "dev:cli": "tsx src/cli.ts",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:cli": "tsc -p tsconfig.json",
+    "build:all": "npm run build:cli && npm run build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check:astro": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:content": "node dist/src/cli.js validate",
-    "check": "npm run build && npm test && npm run validate:content"
+    "test:e2e": "node tools/run-e2e.mjs",
+    "validate:content": "node dist-cli/src/cli.js validate",
+    "validate:site": "node tools/validate-site.mjs",
+    "check:cli": "npm run build:cli && npm test && npm run validate:content",
+    "check": "npm run check:cli && npm run check:astro && npm run build && npm run validate:site"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "commander": "^14.0.0"
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.5",
+    "commander": "^14.0.0",
+    "marked": "^18.0.10",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.0.0",
+    "cross-env": "^10.1.0",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
     "vitest": "^3.2.0"
